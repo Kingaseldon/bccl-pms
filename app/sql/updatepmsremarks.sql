@@ -1,0 +1,10 @@
+UPDATE pmshistoricalraw SET PMS17Remarks = "SP in next PMS cycle" where CID = '11606003468';
+UPDATE pmshistoricalraw SET PMS17Remarks = "SP in next PMS cycle" where CID = '11508000414';
+UPDATE pmshistoricalraw SET PMS17Remarks = "Hold SI in 19th PMS cycle" where CID = '11506002248';
+UPDATE pmshistoricalraw SET PMS17Remarks = "SI in 19th PMS cycle" where CID = '10701000967';
+UPDATE pmshistoricalraw SET PMS17Remarks = "SP in 19th PMS round" where CID = '12007001928';
+UPDATE pmshistoricalraw SET PMS17Remarks = "SP in 19th PMS round" where CID = '10902000926';
+UPDATE pmshistoricalraw SET PMS17Remarks = "SP in 20th PMS round" where CID = '10907001466';
+UPDATE pmshistoricalraw SET PMS17Remarks = "SP in 20th PMS round" where CID = '11606003153';
+UPDATE pmshistoricalraw SET PMS17Remarks = "SP in 20th PMS round" where CID = '10701001504';
+UPDATE pmshistoricalraw SET PMS17Remarks = "SP in 20th PMS round" where CID = '11606002144';

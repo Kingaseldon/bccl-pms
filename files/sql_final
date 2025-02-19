@@ -1,0 +1,2 @@
+DELETE FROM sys_pmsnumber WHERE DATE(StartDate) < '2023-01-01';
+UPDATE sys_pmsnumber SET PMSNumber = (PMSNumber - 25);

@@ -1,0 +1,1 @@
+/usr/bin/mysqldump --routines -u root -p'rU%@b$ma<q/]NZLJQ5-4' ticlpms > /usr/share/nginx/backup/ticlpms_$(date +%Y-%m-%d).sql

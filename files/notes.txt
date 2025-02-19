@@ -1,0 +1,20 @@
+Remaining
+BCCL:
+Import data
+   - Section head and Dept. Head criteria   - DONE -
+   - Function to populate PositionId column  - DONE -
+   - Remaining employees' appraisal structure (appraisal_remaining.xlsx)    - DONE -
+   - Logo for BCCL   - DONE -
+Real Time KPI   - DONE -
+Test all thoroughly
+
+BBPL, TMPL, BSMPL:
+Pay Scale - 5 figures    - DONE -
+Import data - ALL DONE -
+    - Criteria
+    - Hierarchy
+    - Logo
+Real Time KPI    - DONE -
+Test all thoroughly     - DONE -
+
+***************  DEADLINE 15th July, 2022  ****************

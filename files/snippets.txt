@@ -1,0 +1,250 @@
+BCCL:
+    public function assignSupervisorId(){
+        $employees = DB::table("mas_employee")
+            ->whereRaw('EmpId = 2018010')
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>18]);
+
+        dd('done');
+        //COMMERCIAL DEPT
+        //--> Grade 6 & 7
+        $employees = DB::table("mas_employee")
+                        ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('6','7'))")
+                        ->where("DepartmentId",1)
+                        ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>3]);
+
+        //--> Grade 8 & 9
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('8','9'))")
+            ->where("DepartmentId",1)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>4]);
+
+        //--> Grade 10,11,12
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('10','11','12'))")
+            ->where("DepartmentId",1)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>5]);
+
+        //FINANCE DEPT
+        //--> Grade 5,6
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('5','6'))")
+            ->where("DepartmentId",4)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>6]);
+
+        //--> Grade 7,8
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('7','8'))")
+            ->where("DepartmentId",4)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>7]);
+
+        //--> Grade 9,10
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('9','10'))")
+            ->where("DepartmentId",4)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>8]);
+
+        //--> Grade 11,12
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('11','12'))")
+            ->where("DepartmentId",4)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>9]);
+
+        //MARKETING DEPT
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('7','8','9','10','11','12'))")
+            ->where("DepartmentId",7)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>10]);
+
+        //PURCHASING DEPT
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('7','8','9','10','11','12'))")
+            ->where("DepartmentId",12)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>11]);
+
+        //HRAD DEPT
+        //--> PA -> ID 72
+        $employees = DB::table("mas_employee")
+//            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('7','8','9','10','11','12'))")
+            ->where("DepartmentId",6)
+            ->whereIn("DesignationId",[72])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>15]);
+
+        //-->Drivers -> Ids 26,48,57
+        $employees = DB::table("mas_employee")
+            ->where("DepartmentId",6)
+            ->whereIn("DesignationId",[26,48,57])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>16]);
+
+        //--> Grade 6,7
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('6','7'))")
+            ->where("DepartmentId",6)
+            ->whereNotIn("DesignationId",[26,48,57,72])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>12]);
+
+        //--> Grade 8,9
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('8','9'))")
+            ->where("DepartmentId",6)
+            ->whereNotIn("DesignationId",[26,48,57,72])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>13]);
+
+        //--> Grade 10,11,12
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('10','11','12'))")
+            ->where("DepartmentId",6)
+            ->whereNotIn("DesignationId",[26,48,57,72])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>14]);
+
+        //OPERATIONS DEPT
+        //--> Grade 5,6
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('5','6'))")
+            ->whereIn("DepartmentId",[10,2,8,11,16,15,14])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>17]);
+
+        //--> Grade 7,8
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('7','8'))")
+            ->whereIn("DepartmentId",[10,2,8,11,16,15,14])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>18]);
+
+        //--> Grade 9,10,11,12
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('9','10','11','12'))")
+            ->whereIn("DepartmentId",[10,2,8,11,16,15,14])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>19]);
+
+        //MINING DEPT
+        //--> Grade 10,11
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('10','11'))")
+            ->where("DepartmentId",9)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>20]);
+
+
+        /*** HOS AND HOD ALWAYS LAST TO AVOID OVERWRITING ***/
+        //SECTION HEADS APPLY GROUP
+        DB::update("update mas_employee SET SupervisorId = ? where EmpId in (2021001,1990001,1993001,2016004,2014004,1988002,2013011,2000001,2019015,1995002,1988007,2017031)",[CONST_SUPERVISORID_SECTIONHEAD]);
+
+        //DEPARTMENT HEADS APPLY GROUP
+        DB::update("update mas_employee SET SupervisorId = ? where EmpId in (2010001,1987002,1988001,1993003,2010004,1987003,2019004,1988005,1991001,1987001,1991003,1987004,2019026,2004001)",[CONST_SUPERVISORID_DEPARTMENTHEAD]);
+    }
+
+BSMPL:
+    public function assignSupervisorId(){
+        //Finance & Accounts DEPT
+        //--> Grade 5 & 6
+        $employees = DB::table("mas_employee")
+                        ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('5','6'))")
+                        ->where("DepartmentId",1)
+                        ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>3]);
+
+        //--> Grade 7 & 8
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('7','8'))")
+            ->where("DepartmentId",1)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>4]);
+
+        //--> Grade 9 & 10
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('9','10'))")
+            ->where("DepartmentId",1)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>5]);
+
+        //--> Grade 11 & 12
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('11','12'))")
+            ->where("DepartmentId",1)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>6]);
+
+        //Marketing DEPT
+        //--> Grade 6 & 12
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('6','7','8','9','10','11','12'))")
+            ->where("DepartmentId",2)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>7]);
+
+        //HRAD DEPT
+        //Grade 6,7,8
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('6','7','8'))")
+            ->where("DepartmentId",7)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>8]);
+
+        //Grade 9 & 10
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('9','10'))")
+            ->where("DepartmentId",7)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>9]);
+
+        //Grade 11 & 12
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('11','12'))")
+            ->where("DepartmentId",7)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>10]);
+
+        //Operations Department
+        //Grade 5 & 6
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('5','6'))")
+            ->where("DepartmentId",3)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>12]);
+
+        //Grade 7 & 8
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('7','8'))")
+            ->where("DepartmentId",3)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>13]);
+
+        //Grade 9, 10, 11, 12
+        $employees = DB::table("mas_employee")
+            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Name in ('9','10','11','12'))")
+            ->where("DepartmentId",3)
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>14]);
+
+
+        //DRIVERS - ALL DEPTS
+        $employees = DB::table("mas_employee")
+            ->where("DepartmentId",7)
+            ->whereIn("DesignationId",[10,26,31])
+            ->pluck("Id")->toArray();
+        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>11]);
+
+        /*** HOS AND HOD ALWAYS LAST TO AVOID OVERWRITING ***/
+        //SECTION HEADS APPLY GROUP
+//        DB::update("update mas_employee SET SupervisorId = ? where EmpId in (2021001,1990001,1993001,2016004,2014004,1988002,2013011,2000001,2019015,1995002,1988007,2017031)",[CONST_SUPERVISORID_SECTIONHEAD]);
+
+        //DEPARTMENT HEADS APPLY GROUP
+        DB::update("update mas_employee SET SupervisorId = ? where EmpId in ('1244','1254','1300','1226','1113','1235','1114','CP007','1229')",[CONST_SUPERVISORID_DEPARTMENTHEAD]);
+    }
