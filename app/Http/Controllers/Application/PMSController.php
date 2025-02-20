@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: dell
@@ -363,13 +364,13 @@ class PMSController extends Controller
             //here for Sr. Chemist
             $type = 1;
             //            $employees = DB::select("select T1.Id,'' as Section,B.ReportingLevel1EmployeeId,B.ReportingLevel2EmployeeId, coalesce(Z1.Status,3) as MultipleStatus,concat(T1.Name,', ',V.Name,
-//' Department (Emp Id: ',T1.EmpId,')') as Name, T1.EmpId, T2.PMSOutcomeId,O.Name as Designation, Z.Name as Position, T2.LastStatusId,
-//T2.StatusByEmployeeId, T2.LastStatusByEmployee, T3.Name as Status, T2.Id as SubmissionId, case when B.ReportingLevel1EmployeeId = ? then 1 else 2 end as Level from
-//(mas_employee T1 join mas_department V on V.Id = T1.DepartmentId join mas_designation O on O.Id = T1.DesignationId join mas_hierarchy B on B.EmployeeId = T1.Id and (B.ReportingLevel1EmployeeId = ? or B.ReportingLevel2EmployeeId = ?) left join
-//(mas_employee D1 join mas_position E1 on E1.Id = D1.PositionId) on D1.Id = B.ReportingLevel1EmployeeId left join (mas_employee D2 join mas_position E2 on E2.Id =
-//D2.PositionId) on D2.Id = B.ReportingLevel2EmployeeId) join mas_gradestep Z on Z.Id = T1.GradeStepId left join mas_position A on A.Id = T1.PositionId left join
-//(viewpmssubmissionwithlaststatus T2 join mas_pmsstatus T3 on T3.Id = T2.LastStatusId left join pms_submissionmultiple Z1 on Z1.SubmissionId = T2.Id and
-//Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(T2.SubmissionTime,'%Y-%m-%d') <= ?) where coalesce(T1.Status,0) = 1 group by T1.Id order by A.DisplayOrder,T1.Name",[Auth::id(),Auth::id(),Auth::id(),Auth::id(),$fromDate,$toDate]);
+            //' Department (Emp Id: ',T1.EmpId,')') as Name, T1.EmpId, T2.PMSOutcomeId,O.Name as Designation, Z.Name as Position, T2.LastStatusId,
+            //T2.StatusByEmployeeId, T2.LastStatusByEmployee, T3.Name as Status, T2.Id as SubmissionId, case when B.ReportingLevel1EmployeeId = ? then 1 else 2 end as Level from
+            //(mas_employee T1 join mas_department V on V.Id = T1.DepartmentId join mas_designation O on O.Id = T1.DesignationId join mas_hierarchy B on B.EmployeeId = T1.Id and (B.ReportingLevel1EmployeeId = ? or B.ReportingLevel2EmployeeId = ?) left join
+            //(mas_employee D1 join mas_position E1 on E1.Id = D1.PositionId) on D1.Id = B.ReportingLevel1EmployeeId left join (mas_employee D2 join mas_position E2 on E2.Id =
+            //D2.PositionId) on D2.Id = B.ReportingLevel2EmployeeId) join mas_gradestep Z on Z.Id = T1.GradeStepId left join mas_position A on A.Id = T1.PositionId left join
+            //(viewpmssubmissionwithlaststatus T2 join mas_pmsstatus T3 on T3.Id = T2.LastStatusId left join pms_submissionmultiple Z1 on Z1.SubmissionId = T2.Id and
+            //Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(T2.SubmissionTime,'%Y-%m-%d') <= ?) where coalesce(T1.Status,0) = 1 group by T1.Id order by A.DisplayOrder,T1.Name",[Auth::id(),Auth::id(),Auth::id(),Auth::id(),$fromDate,$toDate]);
 
             $employees = DB::select("select T1.Id,'' as Section,B.ReportingLevel1EmployeeId,B.ReportingLevel2EmployeeId, coalesce(Z1.Status,3) as MultipleStatus,concat(T1.Name,', ',V.Name,
 ' Department (Emp Id: ',T1.EmpId,')') as Name, T1.EmpId, T2.PMSOutcomeId,O.Name as Designation, Z.Name as Position, T2.LastStatusId,
@@ -443,6 +444,122 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         return view('application.pmsappraise')->with('isAppraiser', $isAppraiser)->with('notWithinPMS', $notWithinPMS)->with('totalEmpCount', $totalEmpCount)->with('finalScoreNotApplied', $this->checkAllPMSHasFinalScore())->with('pmsNotSubmitted', $pmsNotSubmitted)->with('pmsNotCompleted', $pmsNotCompleted)->with('revDetails', $revDetails)->with('finalAdjustmentPercent', $finalAdjustmentPercent)->with('type', $type)->with('units', $units)->with('employees', $employees);
     }
 
+    // public function getProcess($id): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    // {
+    //     $pageSettings = ['showSelfScore'];
+    //     $loggedInEmployeeId = Auth::id();
+    //     $hasNoLevel2 = false;
+    //     $hasMultipleLevel1 = false;
+    //     $hasMultipleLevel2 = false;
+    //     $multipleDetailArray = [];
+
+    //     $currentPMSQuery = DB::table('sys_pmsnumber')->where('StartDate', '<=', date('Y-m-d'))->orderBy('StartDate', 'DESC')->pluck('Id');
+    //     $pmsId = $currentPMSQuery[0];
+    //     $statusQuery = DB::table('sys_pmsnumber')->where('Id', $pmsId)->get(['Id', 'Status', 'PMSNumber', 'StartDate']);
+    //     $currentPMSId = $statusQuery[0]->Id;
+    //     $currentPMSStartDate = $statusQuery[0]->StartDate;
+
+    //     $empDetails = DB::select("select distinct T1.Id,T1.PositionId,T1.DepartmentId,T1.SectionId,T1.EmployeeId,T1.LastStatusId,T1.EmpId,T1.PMSOutcomeId,(select GROUP_CONCAT(CONCAT('<strong><em>',DATE_FORMAT(A.StatusUpdateTime,'%D %M, %Y %l:%i %p'),':</strong></em> Status changed to <strong><em>',B.Name,'</strong></em>', ' by <strong><em>',C.Name,'</strong></em>', case when A.Remarks is not null and B.Id <> ? and A.Remarks <> '' then concat('<br/><em>',A.Remarks,'</em>') else '' end) order by A.StatusUpdateTime SEPARATOR '<br/><br/>') from pms_submissionhistory A join mas_pmsstatus B on A.PMSStatusId = B.Id join mas_employee C on C.Id = A.StatusByEmployeeId where A.SubmissionId = T1.Id) as History,(select GROUP_CONCAT(b1.Name SEPARATOR ',<br/>') from pms_submissionmultiple e1 join mas_employee b1 on b1.Id = e1.AppraisedByEmployeeId where e1.SubmissionId = T1.Id and e1.ForLevel=1) as Level1Employee,T1.CIDNo,T1.OutcomeDateTime,T1.EmployeeId,T1.Level2CriteriaType,T1.WeightageForLevel1,T1.WeightageForLevel2 from viewpmssubmissionwithlaststatus T1 left join (pms_submissionmultiple T2 join mas_employee T3 on T3.Id = T2.AppraisedByEmployeeId) on T2.SubmissionId = T1.Id left join (mas_hierarchy T4 join mas_employee T5 on T4.ReportingLevel1EmployeeId = T5.Id) on T4.EmployeeId = T1.EmployeeId where T1.Id = ? group by T1.Id", [CONST_PMSSTATUS_DRAFT, $id]);
+    //     if (count($empDetails) == 0) {
+    //         abort(404);
+    //     }
+    //     $employeeId = $empDetails[0]->EmployeeId;
+
+    //     $appraiserDetails = $this->getAppraiserDetails($employeeId, false, Auth::id());
+    //     $scoreColumn = $appraiserDetails['scoreColumn'];
+
+    //     $reportingLevel1EmployeeIds = DB::table('mas_hierarchy')->where('EmployeeId', $employeeId)->whereNotNull('Reportinglevel1EmployeeId')->pluck('Reportinglevel1EmployeeId')->toArray();
+
+    //     $reportingLevel2EmployeeIds = DB::table('mas_hierarchy')->where('EmployeeId', $employeeId)->whereNotNull('Reportinglevel2EmployeeId')->pluck('Reportinglevel2EmployeeId')->toArray();
+    //     if (count($reportingLevel1EmployeeIds) > 1) {
+    //         $hasMultipleLevel1 = true;
+    //     }
+    //     if (count($reportingLevel2EmployeeIds) > 1) {
+    //         $hasMultipleLevel2 = true;
+    //     }
+    //     $empId = $empDetails[0]->EmpId;
+    //     if (in_array($loggedInEmployeeId, $reportingLevel1EmployeeIds)) {
+    //         $pageSettings[] = "allowLevel1Input";
+    //         $loggedInLevel = 1;
+    //         if (count(array_filter($reportingLevel2EmployeeIds)) > 0) {
+    //             $type = 1;
+    //         } else {
+    //             $hasNoLevel2 = true;
+    //             $type = 2;
+    //         }
+    //         $append = ',T2.Level1Rating';
+    //     } else if (in_array($loggedInEmployeeId, $reportingLevel2EmployeeIds)) {
+    //         $pageSettings[] = "showLevel1Score";
+    //         $pageSettings[] = "allowLevel2Input";
+    //         $loggedInLevel = 2;
+    //         $type = 2;
+    //         $append = ",T2.Level1Rating";
+    //     } else {
+    //         return redirect('appraisepms')->with('errormessage', 'You do not have  authority to view this record!');
+    //     }
+
+    //     $pmsDetails = DB::select("select T2.Id,T2.AssessmentArea, T3.LastRemarks as Remarks, T3.StatusByEmployeeId, T2.Weightage, coalesce(T2.ApplicableToLevel2,0) as ApplicableToLevel2, T2.SelfRating$append,T2.Level2Rating from pms_submission T1 join pms_submissiondetail T2 on T1.Id = T2.SubmissionId join viewpmssubmissionwithlaststatus T3 on T3.Id = T1.Id where T1.Id = ? order by T2.DisplayOrder", [$id]);
+    //     $qualitativeScoreTotal = false;
+    //     if ($hasMultipleLevel1) {
+    //         $qualitativeScoreTotal = $this->getTotalQualitativeScore($id, Auth::id(), "Score", true);
+    //     }
+
+    //     $pmsMultiple = DB::select("select T1.FilePath, T1.Remarks, T1.ForLevel, T1.AppraisedByEmployeeId, T2.Name as Appraiser from pms_submissionmultiple T1 join mas_employee T2 on T1.AppraisedByEmployeeId = T2.Id where T1.SubmissionId = ? order by T1.created_at", [$id]);
+    //     $multipleDetails = DB::select("select T1.Score, T1.SubmissionDetailId from pms_submissionmultipledetail T1 where T1.SubmissionMultipleId = (select A.Id from pms_submissionmultiple A where A.SubmissionId = ? and A.AppraisedByEmployeeId = ? and A.Status = 2)", [$id, $loggedInEmployeeId]);
+
+    //     $multipleLevel1Score = $multipleDetails[0]->MultipleLevel1Score ?? false;
+
+    //     foreach ($multipleDetails as $multipleDetail):
+    //         $multipleDetailArray[$multipleDetail->SubmissionDetailId] = $multipleDetail->Score;
+    //     endforeach;
+
+    //     if (!count($pmsDetails)) {
+    //         return redirect('appraisepms')->with('errormessage', 'Record not found');
+    //     }
+
+    //     $details = DB::select("select T1.Email,T1.MobileNo,T1.Qualification1,T1.Qualification2, T1.ProfilePicPath,T1.Extension,T1.Name,O.Name as DesignationLocation, T2.Name as Department, T4.Name as Section, T3.Name as GradeStep from mas_employee T1 join mas_designation O on O.Id = T1.DesignationId join mas_department T2 on T2.Id = T1.DepartmentId left join mas_gradestep T3 on T3.Id = T1.GradeStepId left join mas_section T4 on T4.Id = T1.SectionId where T1.Id = ?", [$employeeId]);
+
+    //     $files = DB::table('pms_submission')->where('Id', $id)->get(['FilePath', 'File2Path', 'File3Path', 'File4Path']);
+
+    //     $pmsFile = $files[0]->FilePath;
+    //     $filePath2 = $files[0]->File2Path;
+    //     $filePath3 = $files[0]->File3Path;
+    //     $filePath4 = $files[0]->File4Path;
+
+    //     $goalAchievementScore = DB::table("pms_employeegoal as T1")
+    //         ->join('pms_employeegoaldetail as T2', 'T2.EmployeeGoalId', '=', 'T1.Id')
+    //         ->where('T1.SysPmsNumberId', $currentPMSId)
+    //         ->where('T1.EmployeeId', $employeeId)
+    //         ->sum($scoreColumn);
+    //     if ($goalAchievementScore && count($pmsDetails) > 0) {
+    //         $userPositionId = $empDetails[0]->PositionId;
+    //         $userDepartmentId = $empDetails[0]->DepartmentId;
+
+    //         $userPositionDepartmentIdQuery = DB::table('mas_positiondepartment')->where('DepartmentId', $userDepartmentId)->where('PositionId', $userPositionId)->pluck('Id');
+    //         $userPositionDepartmentId = isset($userPositionDepartmentIdQuery[0]) ? $userPositionDepartmentIdQuery[0] : false;
+    //         $assessmentAreas = DB::select("select T2.Description,T2.Weightage,T2.ApplicableToLevel2, 0 as DisplayOrder from mas_positiondepartmentrating T1 join mas_positiondepartmentratingcriteria T2 on T2.PositionDepartmentRatingId = T1.Id where T1.PositionDepartmentId = ? and T2.Weightage = (select max(B.Weightage) from mas_positiondepartmentrating A join mas_positiondepartmentratingcriteria B on B.PositionDepartmentRatingId = A.Id where A.PositionDepartmentId = ?) union all select T2.Description,T2.Weightage,T2.ApplicableToLevel2, T2.DisplayOrder from mas_positiondepartmentrating T1 join mas_positiondepartmentratingcriteria T2 on T2.PositionDepartmentRatingId = T1.Id where T1.PositionDepartmentId = ? and T2.Weightage <> (select max(B.Weightage) from mas_positiondepartmentrating A join mas_positiondepartmentratingcriteria B on B.PositionDepartmentRatingId = A.Id where A.PositionDepartmentId = ?) order by DisplayOrder", [$userPositionDepartmentId, $userPositionDepartmentId, $userPositionDepartmentId, $userPositionDepartmentId]);
+
+    //         $goalAchievementScore = ($goalAchievementScore / 100) * $assessmentAreas[0]->Weightage;
+
+    //         $goalOutOf = $assessmentAreas[0]->Weightage;
+
+    //         if ($userPositionId == CONST_POSITION_HOS) {
+    //             $scoresOfSubordinate = DB::select("select T1.Name as Section, coalesce((select ROUND(AVG(coalesce(A.Level1Rating,A.SelfRating)/A.Weightage * ?),2) from pms_submissiondetail A join pms_submission B on B.Id = A.SubmissionId where B.SectionId = T1.Id and A.DisplayOrder = 0 and B.EmployeeId <> ? and B.SubmissionTime >= ?),0) as Score, (select count(A.Id) from pms_submission A where A.SectionId = T1.Id and A.SubmissionTime >= ?) as SectionEmployeeCount from mas_section T1 where T1.Id = ?", [$goalOutOf, $empDetails[0]->EmployeeId, $currentPMSStartDate, $currentPMSStartDate, $empDetails[0]->SectionId]);
+    //             $subordinateScorePercentage = DB::table('pms_employeegoal')->where('EmployeeId', $empDetails[0]->EmployeeId)->orderBy('created_at', 'DESC')->take(1)->value('SubordinateScorePercentage');
+    //             $total = 0;
+    //             foreach ($scoresOfSubordinate as $scoreOfSubordinate):
+    //                 $total += $scoreOfSubordinate->Score;
+    //             endforeach;
+    //             $average = $total / count($scoresOfSubordinate);
+    //             $goalAchievementScore = round((($subordinateScorePercentage / 100 * $average) + ((100 - $subordinateScorePercentage) / 100 * $goalAchievementScore)), 2);
+    //         }
+    //     }
+
+    //     //FETCH HISTORY FOR DISPLAY
+    //     $history = $this->getEmployeePMSHistory(trim($empId));
+    //     //END
+    //     return view('application.pmsprocess')->with('goalAchievementScore', $goalAchievementScore)->with('pmsMultiple', $pmsMultiple)->with('loggedInLevel', $loggedInLevel)->with('multipleDetailArray', $multipleDetailArray)->with('hasMultipleLevel1', $hasMultipleLevel1)->with('hasMultipleLevel2', $hasMultipleLevel2)->with('history', $history)->with('filePath4', $filePath4)->with('empDetails', $empDetails)->with('hasNoLevel2', $hasNoLevel2)->with('details', $details)->with('type', $type)->with('id', $id)->with('pmsDetails', $pmsDetails)->with('pmsFile', $pmsFile)->with('filePath2', $filePath2)->with('filePath3', $filePath3);
+    // }
     public function getProcess($id): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         $pageSettings = ['showSelfScore'];
@@ -497,7 +614,20 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             return redirect('appraisepms')->with('errormessage', 'You do not have  authority to view this record!');
         }
 
-        $pmsDetails = DB::select("select T2.Id,T2.AssessmentArea, T3.LastRemarks as Remarks, T3.StatusByEmployeeId, T2.Weightage, coalesce(T2.ApplicableToLevel2,0) as ApplicableToLevel2, T2.SelfRating$append,T2.Level2Rating from pms_submission T1 join pms_submissiondetail T2 on T1.Id = T2.SubmissionId join viewpmssubmissionwithlaststatus T3 on T3.Id = T1.Id where T1.Id = ? order by T2.DisplayOrder", [$id]);
+        // getting quantatives for level 1 only and qualitatives for level 2 only
+        $userId = Auth::Id();
+        $level1UserExist = DB::select('SELECT * FROM mas_hierarchy a WHERE a.EmployeeId = ? AND a.ReportingLevel1EmployeeId = ? ', [$employeeId, $userId]);
+        $level2UserExist = DB::select('SELECT * FROM mas_hierarchy a WHERE a.EmployeeId = ? AND a.ReportingLevel2EmployeeId = ? ', [$employeeId, $userId]);
+
+        $pmsDetails = [];
+        if ($level1UserExist && $hasNoLevel2) {
+            $pmsDetails = DB::select("SELECT T2.Id,T2.AssessmentArea, T3.LastRemarks as Remarks, T3.StatusByEmployeeId, T2.Weightage, coalesce(T2.ApplicableToLevel2,0) as ApplicableToLevel2, T2.SelfRating$append,T2.Level2Rating from pms_submission T1 join pms_submissiondetail T2 on T1.Id = T2.SubmissionId join viewpmssubmissionwithlaststatus T3 on T3.Id = T1.Id where T1.Id = ? order by T2.DisplayOrder", [$id]);
+        } else if ($level1UserExist && !$hasNoLevel2) {
+            $pmsDetails = DB::select("SELECT T2.Id,T2.AssessmentArea, T3.LastRemarks as Remarks, T3.StatusByEmployeeId, T2.Weightage, coalesce(T2.ApplicableToLevel2,0) as ApplicableToLevel2, T2.SelfRating$append,T2.Level2Rating from pms_submission T1 join pms_submissiondetail T2 on T1.Id = T2.SubmissionId join viewpmssubmissionwithlaststatus T3 on T3.Id = T1.Id where T1.Id = ? and T2.ApplicableToLevel2 = 0 order by T2.DisplayOrder", [$id]);
+        } else if ($level2UserExist) {
+            $pmsDetails = DB::select("SELECT T2.Id,T2.AssessmentArea, T3.LastRemarks as Remarks, T3.StatusByEmployeeId, T2.Weightage, coalesce(T2.ApplicableToLevel2,0) as ApplicableToLevel2, T2.SelfRating$append,T2.Level2Rating from pms_submission T1 join pms_submissiondetail T2 on T1.Id = T2.SubmissionId join viewpmssubmissionwithlaststatus T3 on T3.Id = T1.Id where T1.Id = ? and T2.ApplicableToLevel2 = 1 order by T2.DisplayOrder", [$id]);
+        }
+
         $qualitativeScoreTotal = false;
         if ($hasMultipleLevel1) {
             $qualitativeScoreTotal = $this->getTotalQualitativeScore($id, Auth::id(), "Score", true);
@@ -530,6 +660,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             ->where('T1.SysPmsNumberId', $currentPMSId)
             ->where('T1.EmployeeId', $employeeId)
             ->sum($scoreColumn);
+
         if ($goalAchievementScore && count($pmsDetails) > 0) {
             $userPositionId = $empDetails[0]->PositionId;
             $userDepartmentId = $empDetails[0]->DepartmentId;
@@ -556,8 +687,9 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
         //FETCH HISTORY FOR DISPLAY
         $history = $this->getEmployeePMSHistory(trim($empId));
-        //END
-        return view('application.pmsprocess')->with('goalAchievementScore', $goalAchievementScore)->with('pmsMultiple', $pmsMultiple)->with('loggedInLevel', $loggedInLevel)->with('multipleDetailArray', $multipleDetailArray)->with('hasMultipleLevel1', $hasMultipleLevel1)->with('hasMultipleLevel2', $hasMultipleLevel2)->with('history', $history)->with('filePath4', $filePath4)->with('empDetails', $empDetails)->with('hasNoLevel2', $hasNoLevel2)->with('details', $details)->with('type', $type)->with('id', $id)->with('pmsDetails', $pmsDetails)->with('pmsFile', $pmsFile)->with('filePath2', $filePath2)->with('filePath3', $filePath3);
+
+        return view('application.pmsprocess')->with('goalAchievementScore', $goalAchievementScore)->with('pmsMultiple', $pmsMultiple)->with('loggedInLevel', $loggedInLevel)->with('multipleDetailArray', $multipleDetailArray)->with('hasMultipleLevel1', $hasMultipleLevel1)->with('hasMultipleLevel2', $hasMultipleLevel2)->with('history', $history)->with('filePath4', $filePath4)->with('empDetails', $empDetails)->with('hasNoLevel2', $hasNoLevel2)->with('details', $details)->with('type', $type)->with('id', $id)->with('pmsDetails', $pmsDetails)->with('pmsFile', $pmsFile)->with('filePath2', $filePath2)->with('filePath3', $filePath3)
+            ->with('level1UserExist', $level1UserExist)->with('level2UserExist', $level2UserExist);
     }
 
     public function postProcess(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
@@ -752,7 +884,6 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             if ($employeeMobileNo) {
                 $this->sendSMS($employeeMobileNo, $smsMessage);
             }
-
         } else {
             $empDetails = DB::table('mas_employee as T1')->join('mas_designation as A', 'A.Id', '=', 'T1.DesignationId')->join('mas_gradestep as T2', 'T2.Id', '=', 'T1.GradeStepId')->join('mas_section as T3', 'T3.Id', '=', 'T1.SectionId')->join('mas_department as T4', 'T4.Id', '=', 'T1.DepartmentId')->where('T1.Id', $employeeId)->get(array("T1.BasicPay", "T1.Name as EmployeeName", "T1.CIDNo", "T2.Name as GradeStep", "T3.Name as Section", "T4.Name as Department", "T2.PayScale", "T1.GradeStepId", "A.Name as Designation"));
             if (count($empDetails) == 0) {
@@ -1181,7 +1312,6 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                     $level1MultipleScore[$level1AppraiserId][$level1MultipleIndividual->SubmissionDetailId] = $level1MultipleIndividual->Score;
                 endforeach;
             endforeach;
-
         }
         if ($level2AppraiserCount > 1) {
             foreach ($level2Appraisers as $level2Appraiser):
@@ -1705,7 +1835,6 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                 if ($lastStatusId != CONST_PMSSTATUS_DRAFT) {
                     $this->saveStatus($inputs['Id'], CONST_PMSSTATUS_DRAFT, Auth::id());
                 }
-
             } else {
                 if (!$file) {
                     $inputs['FilePath'] = NULL;
@@ -2098,10 +2227,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         return round($finalScore, 2);
     }
 
-    public function getFinalScore2($id)
-    {
-
-    }
+    public function getFinalScore2($id) {}
 
     public function postProcessMultiple(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
@@ -2196,7 +2322,6 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                 $bottomArray['CreatedBy'] = $loggedInEmployeeId;
                 PMSSubmissionMultipleDetail::create($bottomArray);
             endforeach;
-
         } catch (\Exception $e) {
             DB::rollBack();
             $this->saveError($e, false);
@@ -2294,7 +2419,6 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                     DB::delete("DELETE FROM pms_historical where PMSNumberId = ? and EmpId = ?", [$currentPMSId, $empId]);
                     DB::table('pms_submission')->where('Id', $id)->update(['PMSOutcomeId' => CONST_PMSOUTCOME_NOACTION]);
                     DB::insert("INSERT INTO pms_historical (CIDNo,EmpId,PMSNumberId,PMSSubmissionId,PMSSCore,PMSResult,PMSRemarks) SELECT T2.CIDNo,T2.EmpId, ?,?, ?, D.Name, T1.FinalRemarks from pms_submission T1 join mas_employee T2 on T2.Id = T1.EmployeeId left join mas_pmsoutcome D on D.Id = T1.PMSOutcomeId where T1.Id = ?", [$currentPMSId, $pmsSubmissionId, $finalScore, $pmsSubmissionId]);
-
                 }
             }
             //END CALCULATE AVG AND PUSH
@@ -2462,5 +2586,4 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             }
         }
     }
-
 }
