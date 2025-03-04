@@ -117,8 +117,8 @@ class Controller extends BaseController
         return 1;
         $env = (config('app.env'));
         //        if($env == 'local'){
-//            $mobile = "97577116699";
-//        }else{
+        //            $mobile = "97577116699";
+        //        }else{
         if (!str_starts_with($mobile, '975')) {
             $mobile = "975$mobile";
         }
@@ -253,7 +253,6 @@ class Controller extends BaseController
         }
 
         return "$year-$month-$day";
-
     }
     public function pmsPeriodsForReports(): array
     {
@@ -340,12 +339,14 @@ class Controller extends BaseController
 
         $url = "http://118.103.137.224:80/cgi-bin/BMP_SendTextMsg?";
         $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $postData
-        )
+        curl_setopt_array(
+            $ch,
+            array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $postData
+            )
         );
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
@@ -417,11 +418,11 @@ VALUES (UUID(), ?, 'Problem solving & Decision making', 3.00, 1, 128, NULL, NOW(
 
         //Marketing Department
         //-> Grade 6 to 12
-//        $employees = DB::table("mas_employee")
-//            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Id in (6,7,8,9,10,11,12))")
-//            ->whereIn("SectionId",[9])
-//            ->pluck("Id")->toArray();
-//        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>7]);
+        //        $employees = DB::table("mas_employee")
+        //            ->whereRaw("GradeStepId in (select Id from mas_gradestep where Id in (6,7,8,9,10,11,12))")
+        //            ->whereIn("SectionId",[9])
+        //            ->pluck("Id")->toArray();
+        //        DB::table("mas_employee")->whereIn("Id",$employees)->update(['SupervisorId'=>7]);
 
         //HRAD
         //-> Grade 6,7,8
@@ -482,7 +483,6 @@ VALUES (UUID(), ?, 'Problem solving & Decision making', 3.00, 1, 128, NULL, NOW(
             ->whereIn("EmpId", [1254, 1693, 1114, 1235, 1226, 1300])
             ->pluck("Id")->toArray();
         DB::table("mas_employee")->whereIn("Id", $employees)->update(['SupervisorId' => 2]);
-
     }
     public function assignPositionId()
     {
@@ -557,7 +557,7 @@ VALUES (UUID(), ?, 'Problem solving & Decision making', 3.00, 1, 128, NULL, NOW(
         if ($today >= strtotime(date('Y-07-01')) && $today <= strtotime(date('Y-09-31'))) {
             $withinSecondPMSOfYear = true;
         } else {
-            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-02-31'))) {
+            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-06-31'))) {
                 $withinFirstPMSOfYear = true;
             }
         }
@@ -577,4 +577,3 @@ VALUES (UUID(), ?, 'Problem solving & Decision making', 3.00, 1, 128, NULL, NOW(
         return $nextPMSId;
     }
 }
-
