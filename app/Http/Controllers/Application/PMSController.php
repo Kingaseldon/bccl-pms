@@ -66,10 +66,10 @@ class PMSController extends Controller
             $lastPMSQuery = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-07-01'), date('Y-09-31')])->pluck('Id');
             $lastPMSId = isset($lastPMSQuery[0]) ? $lastPMSQuery[0] : '';
         } else {
-            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-02-31'))) {
+            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-06-31'))) {
                 $withinFirstPMSOfYear = true;
-                $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-02-31')])->count();
-                $lastPMSQuery = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-02-31')])->pluck('Id');
+                $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-06-31')])->count();
+                $lastPMSQuery = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-06-31')])->pluck('Id');
                 $lastPMSId = isset($lastPMSQuery[0]) ? $lastPMSQuery[0] : '';
             }
         }
@@ -186,8 +186,8 @@ class PMSController extends Controller
         if ($today >= strtotime(date('Y-07-01')) && $today <= strtotime(date('Y-09-31'))) {
             $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-07-01'), date('Y-09-31')])->count();
         } else {
-            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-02-31'))) {
-                $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-02-31')])->count();
+            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-06-31'))) {
+                $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-06-31')])->count();
             }
         }
         if ($pmsCount == 0) {
@@ -308,12 +308,16 @@ class PMSController extends Controller
         $pmsNotSubmitted = '';
         $pmsNotCompleted = '';
         $currentPMSQuery = DB::table('sys_pmsnumber')->where('StartDate', '<=', date('Y-m-d'))->orderBy('StartDate', 'DESC')->pluck('Id');
+
         $pmsId = $currentPMSQuery[0];
+
         $statusQuery = DB::table('sys_pmsnumber')->where('Id', $pmsId)->get(['Status', 'PMSNumber', 'StartDate']);
         $status = $statusQuery[0]->Status;
         $currentPMSNumber = $statusQuery[0]->PMSNumber;
         $currentPMSStartDate = $statusQuery[0]->StartDate;
         $notWithinPMS = true;
+
+
 
         if ($status == 3) {
             $previousPMS = (int) $currentPMSNumber - 1;
@@ -334,13 +338,13 @@ class PMSController extends Controller
         } else {
             $finalAdjustmentPercent = DB::table('mas_pmssettings')->whereRaw('created_at >= ? and created_at <= ?', [date('Y-01-01 00:00:00'), date('Y-02-31 23:59:59')])->pluck('FinalAdjustmentPercent');
             $fromDate = date('Y-01-01');
-            $toDate = date('Y-02-31');
+            $toDate = date('Y-06-31');
         }
 
         if ($today >= strtotime(date('Y-07-01')) && $today <= strtotime(date('Y-09-31'))) {
             $notWithinPMS = false;
         } else {
-            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-02-31'))) {
+            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-06-31'))) {
                 $notWithinPMS = false;
             }
         }
@@ -692,6 +696,132 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             ->with('level1UserExist', $level1UserExist)->with('level2UserExist', $level2UserExist);
     }
 
+    // public function postProcess(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    // {
+
+    //     $inputs = $request->input('pmssubmissiondetail');
+    //     $directory = 'uploads/' . date('Y') . '/' . date('m');
+
+    //     $type = $request->Type;
+    //     $remarks = $request->Remarks ?: null;
+    //     $file3 = $request->file('File3');
+    //     $file4 = $request->file('File4');
+    //     $secondLevelEmailArray = [];
+    //     $secondLevelMobileNoArray = [];
+    //     $firstLevelEmailArray = [];
+    //     $firstLevelMobileNoArray = [];
+
+    //     foreach ($inputs as $key => $value):
+    //         $id = $value['Id'];
+    //         $object = PMSSubmissionDetail::find($id);
+    //         $object->fill($value);
+    //         $object->update();
+    //     endforeach;
+    //     if ($type == 1) {
+    //         $status = CONST_PMSSTATUS_VERIFIED;
+    //         $statusText = "Appraised";
+    //     } else {
+    //         $status = CONST_PMSSTATUS_APPROVED;
+    //         $statusText = "Appraised";
+    //     }
+
+    //     $statusDetails = DB::select("select T1.Id, T1.SubmissionTime, T1.EmployeeId, T2.Email, T2.MobileNo, T2.EmpId,T2.Name as EmployeeName, concat(T2.Name,' of ', T3.Name) as Employee, Z1.Name as GradeStep, T4.Name as Position from pms_submission T1 join (mas_employee T2 join mas_gradestep Z1 on Z1.Id = T2.GradeStepId join mas_department T3 on T3.Id = T2.DepartmentId left join mas_position T4 on T4.Id = T2.PositionId) on T2.Id = T1.EmployeeId where T1.Id = (select A.SubmissionId from pms_submissiondetail A where A.Id = ?)", [$id]);
+    //     $pmsSubmissionId = $statusDetails[0]->Id;
+    //     $empId = $statusDetails[0]->EmpId;
+    //     $currentPMSSubmissionDate = $statusDetails[0]->SubmissionTime;
+    //     if ($file3) {
+    //         $fileName = 'PMS File_' . $empId . '_2_' . randomString() . randomString() . '.' . $file3->getClientOriginalExtension();
+    //         $file3->move($directory, $fileName);
+    //         $filePath = $directory . '/' . $fileName;
+    //         DB::table('pms_submission')->where('Id', $pmsSubmissionId)->update(['File3Path' => $filePath]);
+    //     }
+    //     if ($file4) {
+    //         $fileName = 'PMS File_' . $empId . '_3_' . randomString() . randomString() . '.' . $file4->getClientOriginalExtension();
+    //         $file4->move($directory, $fileName);
+    //         $filePath = $directory . '/' . $fileName;
+    //         DB::table('pms_submission')->where('Id', $pmsSubmissionId)->update(['File4Path' => $filePath]);
+    //     }
+
+    //     $employee = $statusDetails[0]->EmployeeName;
+    //     $employeeId = $statusDetails[0]->EmployeeId;
+
+
+    //     $this->saveStatus($pmsSubmissionId, $status, Auth::id(), $remarks);
+
+    //     //SEND SMS AND EMAIL TO NEXT LEVEL WITH LINK
+    //     $actionByNameQuery = DB::table('mas_employee as T1')->join('mas_designation as T2', 'T2.Id', '=', 'T1.DesignationId')->where('T1.Id', Auth::id())->get(['T1.Name', 'T1.Gender', 'T1.Email', 'T1.MobileNo', 'T2.Name as Designation']);
+    //     $actionByName = isset($actionByNameQuery[0]) ? ($actionByNameQuery[0]->Name . " (" . $actionByNameQuery[0]->Designation . ")") : "";
+    //     $actionByName = $actionByName ? ($actionByNameQuery[0]->Gender == 'M' ? 'Mr. ' : 'Ms. ') . $actionByName : '';
+    //     $redirectLink = url('/') . "?redirect=trackpms";
+    //     $smsMessage = "Your PMS application has been $statusText by $actionByName. Please check your email for details.";
+    //     $emailMessage = "Your PMS application has been $statusText by $actionByName.<br/><a href='$redirectLink'>Click here to track.</a>";
+
+    //     $employeeEmail = $statusDetails[0]->Email;
+    //     $employeeMobileNo = $statusDetails[0]->MobileNo;
+
+    //     if ($employeeEmail && $employeeEmail != '@tashicell.com') {
+    //         $this->sendMail($employeeEmail, $emailMessage, "Your PMS Evaluation has been $statusText by $actionByName.");
+    //     }
+    //     if ($employeeMobileNo) {
+    //         $this->sendSMS($employeeMobileNo, $smsMessage);
+    //     }
+    //     if ($type == 1) {
+    //         $empDetails = DB::table('mas_employee as T1')->join('mas_designation as A', 'A.Id', '=', 'T1.DesignationId')->join('mas_gradestep as T2', 'T2.Id', '=', 'T1.GradeStepId')->leftJoin('mas_section as T3', 'T3.Id', '=', 'T1.SectionId')->join('mas_department as T4', 'T4.Id', '=', 'T1.DepartmentId')->where('T1.Id', $employeeId)->get(array("T1.BasicPay", "T1.Gender as EmployeeGender", "T1.Name as EmployeeName", "T1.CIDNo", "T2.Name as GradeStep", "T3.Name as Section", "T4.Name as Department", "T2.PayScale", "T1.GradeStepId", 'A.Name as Designation'));
+    //         if (count($empDetails) == 0) {
+    //             abort(404);
+    //         }
+
+    //         $secondLevelEmployeeIdQuery = DB::table('mas_hierarchy as T1')->join('mas_employee as T2', 'T2.Id', '=', 'T1.ReportingLevel2EmployeeId')->whereNotNull("T1.ReportingLevel2EmployeeId")->where('T1.EmployeeId', $employeeId)->get(['T2.Email', 'T2.MobileNo']);
+
+    //         if (count($secondLevelEmployeeIdQuery) > 0) {
+    //             foreach ($secondLevelEmployeeIdQuery as $secondLevelEmployee):
+    //                 if ($secondLevelEmployee->Email && $secondLevelEmployee->Email != '@tashicell.com') {
+    //                     $secondLevelEmailArray[] = $secondLevelEmployee->Email;
+    //                 }
+    //                 if ($secondLevelEmployee->MobileNo) {
+    //                     $secondLevelMobileNoArray[] = $secondLevelEmployee->MobileNo;
+    //                 }
+    //             endforeach;
+    //         }
+
+    //         $employeeGender = $empDetails[0]->EmployeeGender;
+    //         $employeeName = $empDetails[0]->EmployeeName;
+    //         $employeeName = (($employeeGender == 'M') ? 'Mr. ' : 'Ms. ') . $employeeName;
+    //         $employeeCIDNo = $empDetails[0]->CIDNo;
+    //         $designation = $empDetails[0]->Designation;
+    //         $department = $empDetails[0]->Department;
+    //         $section = $empDetails[0]->Section;
+
+    //         $redirectLink = url('/') . "?redirect=processpms/" . $pmsSubmissionId;
+    //         $smsMessage = "PMS of " . $employeeName . " (" . $employeeCIDNo . ") has been appraised and is at your desk. Please check your email for details.";
+    //         $emailMessage = "PMS of " . $employeeName . " ($designation) of $section, $department has been appraised and is at your desk. <br/><a href='$redirectLink'>Click here to evaluate.</a>";
+
+    //         if (count($secondLevelEmailArray) > 0) {
+    //             foreach ($secondLevelEmailArray as $secondLevelEmail):
+    //                 $this->sendMail($secondLevelEmail, $emailMessage, "PMS of " . $employeeName . " has been appraised and is at your desk.");
+    //             endforeach;
+    //         }
+    //         if (count($secondLevelMobileNoArray) > 0) {
+    //             foreach ($secondLevelMobileNoArray as $secondLevelMobileNo):
+    //                 $this->sendSMS($secondLevelMobileNo, $smsMessage);
+    //             endforeach;
+    //         }
+    //     }
+
+    //     if ($type != 1) {
+    //         $pmsNumber = DB::select("select T1.Id,T1.PMSNumber, T1.EvaluationMeetingDate from sys_pmsnumber T1 where T1.StartDate <= ? order by StartDate DESC limit 1", [$currentPMSSubmissionDate]);
+    //         $pmsId = $pmsNumber[0]->Id;
+
+    //         $finalScore = $this->getFinalScore($pmsSubmissionId);
+
+    //         DB::delete("DELETE FROM pms_historical where PMSNumberId = ? and EmpId = ?", [$pmsId, $empId]);
+    //         DB::table('pms_submission')->where('Id', $pmsSubmissionId)->update(['PMSOutcomeId' => CONST_PMSOUTCOME_NOACTION]);
+    //         DB::insert("INSERT INTO pms_historical (CIDNo,EmpId,PMSNumberId,PMSSubmissionId,PMSSCore,PMSResult,PMSRemarks) SELECT T2.CIDNo,T2.EmpId, ?,?, ?, D.Name, T1.FinalRemarks from pms_submission T1 join mas_employee T2 on T2.Id = T1.EmployeeId left join mas_pmsoutcome D on D.Id = T1.PMSOutcomeId where T1.Id = ?", [$pmsId, $pmsSubmissionId, $finalScore, $pmsSubmissionId]);
+    //     }
+    //     //END SEND SMS
+    //     return redirect('appraisepms')->with('successmessage', 'You have appraised PMS for ' . $employee . ' (Emp Id: ' . $empId . ')');
+    // }
+
     public function postProcess(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         $inputs = $request->input('pmssubmissiondetail');
@@ -959,9 +1089,9 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             $withinSecondPMSOfYear = true;
             $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-07-01'), date('Y-09-31')])->count();
         } else {
-            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-02-31'))) {
+            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-06-31'))) {
                 $withinFirstPMSOfYear = true;
-                $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-02-31')])->count();
+                $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-06-31')])->count();
             }
         }
 
@@ -974,13 +1104,13 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                     $hasLevel2 = true;
                 }
                 if ($withinFirstPMSOfYear) {
-                    $pmsDetails = DB::select("select T1.Id,T1.SubmissionTime, T1.OfficeOrderPath, T2.Name as PMSOutcome, DATE_FORMAT(T1.OutcomeDateTime,'%D %M, %Y at %l:%i %p') as OutcomeDateTime, T1.LastStatusId, T1.StatusByEmployeeId, T1.PMSOutcomeId, T1.OfficeOrderEmailed,T1.FilePath, (select GROUP_CONCAT(CONCAT('<tr><td><strong><em>',DATE_FORMAT(A.StatusUpdateTime,'%D %M, %Y %l:%i %p'),':</strong></em></td><td><strong><em>',B.Name,'</strong></em></td>', '<td><strong><em>',C.Name,'</strong></em>', case when A.Remarks is not null and A.Remarks <> '' then concat('<br/><em>',A.Remarks,'</em>') else '' end,'</td></tr>') order by A.StatusUpdateTime SEPARATOR '<br/><br/>') from pms_submissionhistory A join mas_pmsstatus B on A.PMSStatusId = B.Id join mas_employee C on C.Id = A.StatusByEmployeeId where A.SubmissionId = T1.Id) as History from viewpmssubmissionwithlaststatus T1 left join mas_pmsoutcome T2 on T2.Id = T1.PMSOutcomeId where T1.EmployeeId = ? and (DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [Auth::id(), date('Y-01-01'), date('Y-02-31')]);
+                    $pmsDetails = DB::select("select T1.Id,T1.SubmissionTime, T1.OfficeOrderPath, T2.Name as PMSOutcome, DATE_FORMAT(T1.OutcomeDateTime,'%D %M, %Y at %l:%i %p') as OutcomeDateTime, T1.LastStatusId, T1.StatusByEmployeeId, T1.PMSOutcomeId, T1.OfficeOrderEmailed,T1.FilePath, (select GROUP_CONCAT(CONCAT('<tr><td><strong><em>',DATE_FORMAT(A.StatusUpdateTime,'%D %M, %Y %l:%i %p'),':</strong></em></td><td><strong><em>',B.Name,'</strong></em></td>', '<td><strong><em>',C.Name,'</strong></em>', case when A.Remarks is not null and A.Remarks <> '' then concat('<br/><em>',A.Remarks,'</em>') else '' end,'</td></tr>') order by A.StatusUpdateTime SEPARATOR '<br/><br/>') from pms_submissionhistory A join mas_pmsstatus B on A.PMSStatusId = B.Id join mas_employee C on C.Id = A.StatusByEmployeeId where A.SubmissionId = T1.Id) as History from viewpmssubmissionwithlaststatus T1 left join mas_pmsoutcome T2 on T2.Id = T1.PMSOutcomeId where T1.EmployeeId = ? and (DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [Auth::id(), date('Y-01-01'), date('Y-06-31')]);
                     $pmsHistory = DB::table("pms_submissionhistory as T1")
                         ->join('pms_submission as T2', 'T2.Id', '=', 'T1.SubmissionId')
                         ->join('mas_employee as T3', 'T3.Id', '=', 'T1.StatusByEmployeeId')
                         ->join('mas_pmsstatus as T4', 'T4.Id', '=', 'T1.PMSStatusId')
                         ->leftJoin('mas_designation as T5', 'T5.Id', '=', 'T3.DesignationId')
-                        ->whereRaw("T2.EmployeeId = ? and (DATE_FORMAT(T2.SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(T2.SubmissionTime,'%Y-%m-%d') <= ?)", [Auth::id(), date('Y-01-01'), date('Y-02-31')])
+                        ->whereRaw("T2.EmployeeId = ? and (DATE_FORMAT(T2.SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(T2.SubmissionTime,'%Y-%m-%d') <= ?)", [Auth::id(), date('Y-01-01'), date('Y-06-31')])
                         ->orderBy('T1.StatusUpdateTime')
                         ->get(array('T1.StatusUpdateTime', 'T1.PMSStatusId', DB::raw("(select GROUP_CONCAT(concat(A.Name, ' (',C.Name,')') SEPARATOR ', ') from mas_employee A join mas_designation C on C.Id = A.DesignationId join pms_submissionmultiple B on B.AppraisedByEmployeeId = A.Id and B.ForLevel = 1 where B.SubmissionId = T1.SubmissionId) as Level1MultipleNames"), DB::raw("(select GROUP_CONCAT(concat(A.Name,' (',C.Name,')') SEPARATOR ', ') from mas_employee A join mas_designation C on C.Id = A.DesignationId join pms_submissionmultiple B on B.AppraisedByEmployeeId = A.Id and B.ForLevel = 2 where B.SubmissionId = T1.SubmissionId) as Level2MultipleNames"), 'T5.Name as LastStatusDesignation', 'T3.Id as StatusUpdatedById', DB::raw('T3.Name as StatusUpdatedBy'), 'T1.Remarks', 'T4.Name as Status'));
                 } else {
