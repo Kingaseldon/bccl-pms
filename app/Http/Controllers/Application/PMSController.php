@@ -336,7 +336,7 @@ class PMSController extends Controller
             $fromDate = date('Y-07-01');
             $toDate = date('Y-09-31');
         } else {
-            $finalAdjustmentPercent = DB::table('mas_pmssettings')->whereRaw('created_at >= ? and created_at <= ?', [date('Y-01-01 00:00:00'), date('Y-02-31 23:59:59')])->pluck('FinalAdjustmentPercent');
+            $finalAdjustmentPercent = DB::table('mas_pmssettings')->whereRaw('created_at >= ? and created_at <= ?', [date('Y-01-01 00:00:00'), date('Y-06-31 23:59:59')])->pluck('FinalAdjustmentPercent');
             $fromDate = date('Y-01-01');
             $toDate = date('Y-06-31');
         }
@@ -1513,7 +1513,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             $toDate = date('Y-09-31');
         } else {
             $fromDate = date('Y-01-01');
-            $toDate = date('Y-02-31');
+            $toDate = date('Y-06-31');
         }
         $departments = $this->fetchActiveDepartments();
         $employees = [];
@@ -1911,9 +1911,9 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             $lastPMSQuery = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-07-01'), date('Y-09-31')])->pluck('Id');
             $lastPMSId = isset($lastPMSQuery[0]) ? $lastPMSQuery[0] : '';
         } else {
-            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-02-31'))) {
-                $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-02-31')])->count();
-                $lastPMSQuery = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-02-31')])->pluck('Id');
+            if ($today >= strtotime(date('Y-01-01')) && $today <= strtotime(date('Y-06-31'))) {
+                $pmsCount = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-06-31')])->count();
+                $lastPMSQuery = DB::table('pms_submission')->where('EmployeeId', Auth::id())->whereRaw("(DATE_FORMAT(SubmissionTime,'%Y-%m-%d') >= ? and DATE_FORMAT(SubmissionTime,'%Y-%m-%d') <= ?)", [date('Y-01-01'), date('Y-06-31')])->pluck('Id');
                 $lastPMSId = isset($lastPMSQuery[0]) ? $lastPMSQuery[0] : '';
             }
         }
@@ -2094,9 +2094,9 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             $fromDate = date('Y-07-01 00:00:00');
             $toDate = date('Y-09-31 23:59:59');
         } else {
-            $id = DB::table('mas_pmssettings')->whereRaw('created_at >= ? and created_at <= ?', [date('Y-01-01 00:00:00'), date('Y-02-31 23:59:59')])->pluck('Id');
+            $id = DB::table('mas_pmssettings')->whereRaw('created_at >= ? and created_at <= ?', [date('Y-01-01 00:00:00'), date('Y-06-31 23:59:59')])->pluck('Id');
             $fromDate = date('Y-01-01 00:00:00');
-            $toDate = date('Y-02-31 23:59:59');
+            $toDate = date('Y-06-31 23:59:59');
         }
         if (isset($id) && $id) {
             DB::table('mas_pmssettings')->where('Id', $id)->update(['FinalAdjustmentPercent' => $finalAdjustmentPercentage, 'EditedBy' => Auth::id(), 'updated_at' => date('Y-m-d H:i:s')]);
