@@ -31,6 +31,7 @@ class GoalController extends Controller
         // unset($roundsForThisYear[1]);
         $currentRound = $roundsForThisYear[0]->Round;
         $currentPMSStartDate = DB::table("sys_pmsnumber")->whereRaw("StartDate <= ?", date("Y-m-d"))->orderBy("StartDate", 'DESC')->take(1)->value("StartDate");
+
         $currentPMSId = count($roundsForThisYear) == 2 ? $roundsForThisYear[1]->Id : $roundsForThisYear[0]->Id;
         $currentPMSNumber = count($roundsForThisYear) == 2 ? $roundsForThisYear[1]->PMSNumber : $roundsForThisYear[0]->PMSNumber;
 
@@ -58,10 +59,48 @@ class GoalController extends Controller
         $units = [];
         $employees = [];
 
+
         if ($userPositionId == CONST_POSITION_HOS) {
             $type = 1;
-            $employees = DB::select("select T1.Id, concat(T1.Name,', ',V.Name,' Department', ' (EMP ID: ',T1.EmpId,')') as Name, T2.PMSOutcomeId, T2.Id as PMSSubmissionId,(select C.Id from pms_employeegoal C where C.EmployeeId = T1.Id and C.SysPmsNumberId = ?) as Goal1DefinitionId, (select C.Id from pms_employeegoal C where C.EmployeeId = T1.Id and C.SysPmsNumberId = ?) as Goal2DefinitionId, (select C.Status from pms_employeegoal C where C.EmployeeId = T1.Id and C.SysPmsNumberId = ?) as Goal1DefinitionStatus,(select C.Id from pms_employeegoal C where C.EmployeeId = T1.Id and C.SysPmsNumberId = ?) as Goal2DefinitionStatus,P.Id as GoalDefinitionId,P.Status as GoalDefinitionStatus, O.Name as Designation, Z.Name as Position, T2.LastStatusId, T3.Name as Status, T2.Id as SubmissionId from (mas_employee T1 join mas_department V on V.Id = T1.DepartmentId join mas_designation O on O.Id = T1.DesignationId left join mas_hierarchy B on B.EmployeeId = T1.Id) left join pms_employeegoal P on P.EmployeeId = T1.Id and P.SysPmsNumberId = ? join mas_gradestep Z on Z.Id = T1.GradeStepId left join mas_position A on A.Id = T1.PositionId left join (viewpmssubmissionwithlaststatus T2 join mas_pmsstatus T3 on T3.Id = T2.LastStatusId) on T2.EmployeeId = T1.Id and T2.SubmissionTime >= ? where coalesce(T1.Status,0) = 1 and (B.ReportingLevel1EmployeeId = ? or B.Reportinglevel2EmployeeId = ?) order by A.DisplayOrder,T1.Name", [$firstRoundOfYear, $secondRoundOfYear, $firstRoundOfYear, $secondRoundOfYear, $currentPMSNumber, $currentPMSStartDate, Auth::id(), Auth::id()]);
+
+            // $employees = DB::select("select T1.Id, concat(T1.Name,', ',V.Name,' Department', ' (EMP ID: ',T1.EmpId,')') as Name, T2.PMSOutcomeId, T2.Id as PMSSubmissionId,(select C.Id from pms_employeegoal C where C.EmployeeId = T1.Id and C.SysPmsNumberId = ?) as Goal1DefinitionId, (select C.Id from pms_employeegoal C where C.EmployeeId = T1.Id and C.SysPmsNumberId = ?) as Goal2DefinitionId, (select C.Status from pms_employeegoal C where C.EmployeeId = T1.Id and C.SysPmsNumberId = ?) as Goal1DefinitionStatus,(select C.Id from pms_employeegoal C where C.EmployeeId = T1.Id and C.SysPmsNumberId = ?) as Goal2DefinitionStatus,P.Id as GoalDefinitionId,P.Status as GoalDefinitionStatus, O.Name as Designation, Z.Name as Position, T2.LastStatusId, T3.Name as Status, T2.Id as SubmissionId from (mas_employee T1 join mas_department V on V.Id = T1.DepartmentId join mas_designation O on O.Id = T1.DesignationId left join mas_hierarchy B on B.EmployeeId = T1.Id) left join pms_employeegoal P on P.EmployeeId = T1.Id and P.SysPmsNumberId = ? join mas_gradestep Z on Z.Id = T1.GradeStepId left join mas_position A on A.Id = T1.PositionId left join (viewpmssubmissionwithlaststatus T2 join mas_pmsstatus T3 on T3.Id = T2.LastStatusId) on T2.EmployeeId = T1.Id and T2.SubmissionTime >= ? where coalesce(T1.Status,0) = 1 and (B.ReportingLevel1EmployeeId = ? or B.Reportinglevel2EmployeeId = ?) order by A.DisplayOrder,T1.Name", [$firstRoundOfYear, $secondRoundOfYear, $firstRoundOfYear, $secondRoundOfYear, $currentPMSNumber, $currentPMSStartDate, Auth::id(), Auth::id()]);
+            $employees = DB::select(
+                "
+    SELECT
+        T1.Id,
+        CONCAT(T1.Name,', ',V.Name,' Department', ' (EMP ID: ',T1.EmpId,')') AS Name,
+        T2.PMSOutcomeId,
+        T2.Id AS PMSSubmissionId,
+        (SELECT MAX(C.Id) FROM pms_employeegoal C WHERE C.EmployeeId = T1.Id AND C.SysPmsNumberId = ?) AS Goal1DefinitionId,
+        (SELECT MAX(C.Id) FROM pms_employeegoal C WHERE C.EmployeeId = T1.Id AND C.SysPmsNumberId = ?) AS Goal2DefinitionId,
+        (SELECT MAX(C.Status) FROM pms_employeegoal C WHERE C.EmployeeId = T1.Id AND C.SysPmsNumberId = ?) AS Goal1DefinitionStatus,
+        (SELECT MAX(C.Status) FROM pms_employeegoal C WHERE C.EmployeeId = T1.Id AND C.SysPmsNumberId = ?) AS Goal2DefinitionStatus,
+        P.Id AS GoalDefinitionId,
+        P.Status AS GoalDefinitionStatus,
+        O.Name AS Designation,
+        Z.Name AS Position,
+        T2.LastStatusId,
+        T3.Name AS Status,
+        T2.Id AS SubmissionId
+    FROM
+        (mas_employee T1
+        JOIN mas_department V ON V.Id = T1.DepartmentId
+        JOIN mas_designation O ON O.Id = T1.DesignationId
+        LEFT JOIN mas_hierarchy B ON B.EmployeeId = T1.Id)
+    LEFT JOIN pms_employeegoal P ON P.EmployeeId = T1.Id AND P.SysPmsNumberId = ?
+    JOIN mas_gradestep Z ON Z.Id = T1.GradeStepId
+    LEFT JOIN mas_position A ON A.Id = T1.PositionId
+    LEFT JOIN (viewpmssubmissionwithlaststatus T2 JOIN mas_pmsstatus T3 ON T3.Id = T2.LastStatusId)
+        ON T2.EmployeeId = T1.Id AND T2.SubmissionTime >= ?
+    WHERE
+        COALESCE(T1.Status,0) = 1
+        AND (B.ReportingLevel1EmployeeId = ? OR B.Reportinglevel2EmployeeId = ?)
+    ORDER BY A.DisplayOrder, T1.Name",
+                [$firstRoundOfYear, $secondRoundOfYear, $firstRoundOfYear, $secondRoundOfYear, $currentPMSNumber, $currentPMSStartDate, Auth::id(), Auth::id()]
+            );
         } else if ($userPositionId == CONST_POSITION_HOD) {
+
+
             $type = 2;
             $units = DB::select("select distinct T1.Id, concat(T2.Name, ' | ', T1.Name) as Name from mas_section T1 join mas_department T2 on T2.Id = T1.DepartmentId join (mas_employee A join mas_hierarchy B on B.EmployeeId = A.Id) on A.SectionId = T1.Id where B.ReportingLevel1EmployeeId = ? and coalesce(T1.Status,0) = 1 and coalesce(A.Status,0) = 1 order by T1.Name", [Auth::id()]);
             foreach ($units as $section):
@@ -448,20 +487,20 @@ class GoalController extends Controller
                 DB::table("pms_historical")->where("PMSNumberId", $currentPMSId)->where("EmpId", $empId)->update(["PMSSCore" => $finalScore]);
             }
 
-            //            $employeeId = $submission->EmployeeId;
-//            $reportingLevel1EmployeeIds = DB::table('mas_hierarchy')->where('EmployeeId',$employeeId)->whereNotNull('Reportinglevel1EmployeeId')->orderby('ReportingLevel1EmployeeId')->pluck('Reportinglevel1EmployeeId')->toArray();
-//            $reportingLevel2EmployeeIds = DB::table('mas_hierarchy')->where('EmployeeId',$employeeId)->whereNotNull('Reportinglevel2EmployeeId')->pluck('Reportinglevel2EmployeeId')->toArray();
-//            $hasMultiple = false;
-//            if(count($reportingLevel1EmployeeIds)>1 || count($reportingLevel2EmployeeIds)>1){
-//                $hasMultiple = true;
-//            }
-//            if(!$hasMultiple){
-//                $qualitativeScore = DB::table("pms_submission as T1")->join("pms_submissiondetail as T2","T2.SubmissionId","=","T1.Id")
-//                    ->where("T1.Id",$submissionId)->whereRaw("T2.ApplicableToLevel2=0")->get(["T2.Level1Rating","T2.Weightage"]);
-//                $goalScore = $this->getGoalAchievementScore(26,$employeeId,"T2.Level1Score");
-//                $level1Score = ($goalScore/100) * $qualitativeScore[0]->Weightage;
-//                DB::table("pms_submissiondetail")->where("SubmissionId",$submissionId)->whereRaw("ApplicableToLevel2=0")->update(["Level1Rating"=>$level1Score]);
-//            }
+        //            $employeeId = $submission->EmployeeId;
+        //            $reportingLevel1EmployeeIds = DB::table('mas_hierarchy')->where('EmployeeId',$employeeId)->whereNotNull('Reportinglevel1EmployeeId')->orderby('ReportingLevel1EmployeeId')->pluck('Reportinglevel1EmployeeId')->toArray();
+        //            $reportingLevel2EmployeeIds = DB::table('mas_hierarchy')->where('EmployeeId',$employeeId)->whereNotNull('Reportinglevel2EmployeeId')->pluck('Reportinglevel2EmployeeId')->toArray();
+        //            $hasMultiple = false;
+        //            if(count($reportingLevel1EmployeeIds)>1 || count($reportingLevel2EmployeeIds)>1){
+        //                $hasMultiple = true;
+        //            }
+        //            if(!$hasMultiple){
+        //                $qualitativeScore = DB::table("pms_submission as T1")->join("pms_submissiondetail as T2","T2.SubmissionId","=","T1.Id")
+        //                    ->where("T1.Id",$submissionId)->whereRaw("T2.ApplicableToLevel2=0")->get(["T2.Level1Rating","T2.Weightage"]);
+        //                $goalScore = $this->getGoalAchievementScore(26,$employeeId,"T2.Level1Score");
+        //                $level1Score = ($goalScore/100) * $qualitativeScore[0]->Weightage;
+        //                DB::table("pms_submissiondetail")->where("SubmissionId",$submissionId)->whereRaw("ApplicableToLevel2=0")->update(["Level1Rating"=>$level1Score]);
+        //            }
 
         endforeach;
     }
@@ -544,5 +583,4 @@ class GoalController extends Controller
 
         return round($finalScore, 2);
     }
-
 }
