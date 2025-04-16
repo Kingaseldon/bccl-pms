@@ -67,7 +67,7 @@ var script = (function () {
                         text: "No",
                         btnClass: "btn-blue",
                         keys: ["enter", "shift"],
-                        action: function () {},
+                        action: function () { },
                     },
                 },
             });
@@ -88,7 +88,7 @@ var script = (function () {
                         text: "No",
                         btnClass: "btn-blue",
                         keys: ["enter", "shift"],
-                        action: function () {},
+                        action: function () { },
                     },
                 },
             });
@@ -108,7 +108,7 @@ var script = (function () {
                         text: "No",
                         btnClass: "btn-blue",
                         keys: ["enter", "shift"],
-                        action: function () {},
+                        action: function () { },
                     },
                 },
             });
@@ -128,7 +128,7 @@ var script = (function () {
                         text: "No",
                         btnClass: "btn-blue",
                         keys: ["enter", "shift"],
-                        action: function () {},
+                        action: function () { },
                     },
                 },
             });
@@ -148,7 +148,7 @@ var script = (function () {
                         text: "No",
                         btnClass: "btn-blue",
                         keys: ["enter", "shift"],
-                        action: function () {},
+                        action: function () { },
                     },
                 },
             });
@@ -169,7 +169,7 @@ var script = (function () {
                         text: "No",
                         btnClass: "btn-blue",
                         keys: ["enter", "shift"],
-                        action: function () {},
+                        action: function () { },
                     },
                 },
             });
@@ -428,7 +428,7 @@ var script = (function () {
                 e.preventDefault();
                 $.alert(
                     message +
-                        "<br/><br/><strong>Please correct these errors in order to set criteria</strong>"
+                    "<br/><br/><strong>Please correct these errors in order to set criteria</strong>"
                 );
             } else {
                 $("#validate-criteria").attr("disabled", "disabled");
@@ -504,17 +504,17 @@ var script = (function () {
                 $(this).val("");
                 $.alert(
                     description +
-                        " cannot have more than " +
-                        max +
-                        " points. Please enter correct value."
+                    " cannot have more than " +
+                    max +
+                    " points. Please enter correct value."
                 );
             } else if (parseFloat(value) < parseFloat(min)) {
                 $(this).val("");
                 $.alert(
                     description +
-                        " cannot have less than " +
-                        min +
-                        " points. Please enter correct value."
+                    " cannot have less than " +
+                    min +
+                    " points. Please enter correct value."
                 );
             }
             calcTotal();
@@ -1376,15 +1376,15 @@ var script = (function () {
             if (value !== "") {
                 $(
                     ".category option[data-departmentid!='" +
-                        value +
-                        "'][value!='']"
+                    value +
+                    "'][value!='']"
                 )
                     .addClass("hide")
                     .attr("disabled", "disabled");
                 $(
                     ".category option[data-departmentid='" +
-                        value +
-                        "'][value!='']"
+                    value +
+                    "'][value!='']"
                 )
                     .removeClass("hide")
                     .removeAttr("disabled");
@@ -1411,10 +1411,10 @@ var script = (function () {
                         for (var x in data) {
                             $(".category").append(
                                 "<option value='" +
-                                    data[x].Id +
-                                    "'>" +
-                                    data[x].Name +
-                                    "</option>"
+                                data[x].Id +
+                                "'>" +
+                                data[x].Name +
+                                "</option>"
                             );
                         }
                     },
@@ -1744,7 +1744,7 @@ var script = (function () {
             }
         });
 
-	$(".appraiseeconfirm").on("click", function (e) {
+        $(".appraiseeconfirm").on("click", function (e) {
             e.preventDefault();
             var href = $(this).attr("href");
 
@@ -1759,7 +1759,7 @@ var script = (function () {
                         text: "No",
                         btnClass: "btn-blue",
                         keys: ["enter", "shift"],
-                        action: function () {},
+                        action: function () { },
                     },
                 },
             });
@@ -1780,11 +1780,100 @@ var script = (function () {
                         text: "No",
                         btnClass: "btn-blue",
                         keys: ["enter", "shift"],
-                        action: function () {},
+                        action: function () { },
                     },
                 },
             });
         });
+
+        $(document).on("change", ".editable-score", function () {
+            let inputField = $(this);
+            let assessmentId = inputField.data("id");
+            let scoreType = inputField.data("type");
+            let newValue = parseFloat(inputField.val());  // Ensure it's a valid number
+            let maxValue = parseFloat(inputField.attr("max"));  // Get max weightage
+
+            // Validation checks
+            if (isNaN(newValue)) {
+                $.alert("Invalid score. Please enter a valid number.");
+                inputField.val(""); // Clear invalid input
+                return;
+            }
+
+            if (newValue < 0) {
+                $.alert("Score cannot be negative.");
+                inputField.val(""); // Reset value
+                return;
+            }
+
+            if (newValue > maxValue) {
+                $.alert(`Score cannot exceed the max weightage of ${maxValue}.`);
+                inputField.val(maxValue); // Reset to max
+                return;
+            }
+
+            // Proceed with AJAX if validation passes
+            $.ajax({
+                url: "/update-score",
+                type: "POST",
+                data: {
+                    id: assessmentId,
+                    type: scoreType,
+                    value: newValue,
+                    _token: $('meta[name="csrf-token"]').attr("content")
+                },
+                success: function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        $.alert({
+                            title: "Error!",
+                            content: "An error occured while updating the score.",
+                            buttons: {
+                                ok: function () {
+                                    location.reload();
+                                }
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    $.alert("An error occurred while updating the score.");
+                    // location.reload();
+                }
+            });
+        });
+
+        // Retrieve FinalScore after page reload
+        window.onload = function () {
+            let submissionId = $("#submissionId").val();
+            let updatedFinalScore = $(".final-score").val();
+
+            $.ajax({
+                url: "/update-final-score",
+                type: "POST",
+                data: {
+                    id: submissionId,
+                    finalScore: updatedFinalScore,
+                    _token: $('meta[name="csrf-token"]').attr("content")
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $.alert({
+                            title: "Success!",
+                            content: response.message,
+                            buttons: {
+                                ok: function () {
+                                    location.reload();
+                                }
+                            }
+                        });
+
+                        location.reload();
+                    }
+                }
+            });
+        };
 
         // end
     }

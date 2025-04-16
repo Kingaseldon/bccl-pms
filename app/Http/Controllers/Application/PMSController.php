@@ -1234,7 +1234,13 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         $pmsHistory = $this->getEmployeePMSHistory(trim($empId));
         $submissionHistoryWithRemarks = $this->getPMSDetailsWithRemarks($id);
 
-        return view('application.pmsdetails')->with('submissionHistoryWithRemarks', $submissionHistoryWithRemarks)->with('pmsHistory', $pmsHistory)->with('level1Appraisers', $level1Appraisers)->with('level2Appraisers', $level2Appraisers)->with('level1AppraiserCount', $level1AppraiserCount)->with('level2AppraiserCount', $level2AppraiserCount)->with('level1Multiple', $level1MultipleScore)->with('level2Multiple', $level2MultipleScore)->with('profileDetails', $profileDetails)->with('type', $type)->with('finalScore', $finalScore)->with('history', $history)->with('pmsFile', $pmsFile[0])->with('application', $application)->with('applicationDetails', $applicationDetails)->with('details', $details);
+        $roleId = Auth::user()->RoleId;
+        $isAdmin = false;
+        if ((int)$roleId === 1) {
+            $isAdmin = true;
+        }
+
+        return view('application.pmsdetails')->with('submissionHistoryWithRemarks', $submissionHistoryWithRemarks)->with('pmsHistory', $pmsHistory)->with('level1Appraisers', $level1Appraisers)->with('level2Appraisers', $level2Appraisers)->with('level1AppraiserCount', $level1AppraiserCount)->with('level2AppraiserCount', $level2AppraiserCount)->with('level1Multiple', $level1MultipleScore)->with('level2Multiple', $level2MultipleScore)->with('profileDetails', $profileDetails)->with('type', $type)->with('finalScore', $finalScore)->with('history', $history)->with('pmsFile', $pmsFile[0])->with('application', $application)->with('applicationDetails', $applicationDetails)->with('details', $details)->with('isAdmin', $isAdmin);
     }
 
     public function getPMSHistory(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
@@ -2497,6 +2503,49 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
                 return back()->with('successmessage', "Level 2 Scores PMS Status Removed Successfully For $employee.");
             }
+        }
+    }
+    public function updateScore(Request $request)
+    {
+        $assessment = PMSSubmissionDetail::find($request->id);
+
+
+        if ($assessment) {
+            if ($request->type == "self") {
+                $assessment->SelfRating = $request->value;
+            } elseif ($request->type == "Level1Rating") {
+                $assessment->Level1Rating = $request->value;
+            } elseif ($request->type == "Level2Rating") {
+                $assessment->Level2Rating = $request->value;
+            }
+
+            $assessment->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
+    }
+
+    public function updateFinalScore(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:pms_historical,pmssubmissionid',
+            'finalScore' => 'required|numeric|min:0'
+        ]);
+
+        try {
+            $finalScore = $request->finalScore;
+
+            $updated = DB::table('pms_historical')->where('pmssubmissionid', $request->id)->update(['PMSScore' => $finalScore]);
+
+            if ($updated) {
+                return response()->json(['success' => true, 'message' => 'Final score updated successfully.']);
+            }
+
+            return response()->json(['success' => false, 'message' => 'No records updated. Submission may not exist.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error updating score.', 'error' => $e->getMessage()], 500);
         }
     }
 }

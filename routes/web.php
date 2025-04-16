@@ -1,4 +1,6 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection ALL */
 
 use App\Http\Controllers\Application\DashboardController;
 use App\Http\Controllers\Application\DepartmentController;
@@ -148,6 +150,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('processpmsmultiple', [PMSController::class, 'postProcessMultiple']);
     Route::get('filedownload', [PMSController::class, 'downloadFile']);
 
+    Route::post('update-score', [PMSController::class, 'updateScore']);
+    Route::post('update-final-score', [PmsController::class, 'updateFinalScore']);
+
     Route::get('sendback/{id}', [PMSController::class, 'sendBack']);
 
     Route::get('trackpms', [PMSController::class, 'trackPMS']);
@@ -228,5 +233,4 @@ Route::middleware(['auth'])->group(function () {
 
     // update payscale and grade according to pms outcome
     Route::get('getoutcomeemployeesupdate/{lastdateofcurrentpms?}', [PMSController::class, 'getUpdateOfEmployeesUsingPmsOutcomes']);
-
 });
