@@ -13,7 +13,7 @@
 $controllerObject = new App\Http\Controllers\Controller();
 $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDetails($application[0]->Id);
 ?>
-<input type="hidden" name="submissionId" id="submissionId" value="{{ request()->id }}" />
+
 <div class="table-responsive">
     <table class="table table-bordered table-condensed less-padding" id="calc-total">
         <thead>
@@ -97,19 +97,7 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                     @endif
                     @if (!($application[0]->LastStatusId == CONST_PMSSTATUS_DRAFT && $application[0]->ReportingLevel2EmployeeId))
                         <td class="text-right">
-                            @if ($isAdmin == false)
-                                {{ $assessmentArea->Level1Rating }}
-                            @else
-                                @if ($assessmentArea->Level1Rating > 0)
-                                    <input type="number" class="editable-score"
-                                        name="Level1Rating[{{ $assessmentArea->Id }}]"
-                                        value="{{ $assessmentArea->Level1Rating }}"
-                                        data-id="{{ $assessmentArea->Id }}" data-type="Level1Rating" min="0"
-                                        max="{{ $assessmentArea->Weightage }}"
-                                        @if ($isAdmin == false) readonly disabled @endif step="any"
-                                        style="width:20%;" />
-                                @endif
-                            @endif
+                            {{ $assessmentArea->Level1Rating }}
                         </td>
                         @if ($assessmentArea->ApplicableToLevel2 == 0)
                             <?php $quantitativeWeightageTotal += $assessmentArea->Weightage; ?>
@@ -133,18 +121,7 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                             @endif
 
                             <td class="text-right">
-                                @if ($isAdmin == false)
-                                    {{ $assessmentArea->Level2Rating }}
-                                @else
-                                    @if ($assessmentArea->Level2Rating > 0)
-                                        <input type="number" class="editable-score"
-                                            name="Level2Rating[{{ $assessmentArea->Id }}]"
-                                            value="{{ $assessmentArea->Level2Rating }}"
-                                            data-id="{{ $assessmentArea->Id }}" data-type="Level2Rating" min="0"
-                                            max="{{ $assessmentArea->Weightage }}" step="any"
-                                            style="width: 20%;" />
-                                    @endif
-                                @endif
+                                {{ $assessmentArea->Level2Rating }}
                                 @if ($assessmentArea->ApplicableToLevel2 == 0)
                                     <?php $level2QuantitativeTotal += $assessmentArea->Level2Rating; ?>
                                 @else
@@ -293,7 +270,7 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                                         @endif
                                     </strong>
                                 </td>
-                                <input type="hidden" name="FinalScore" class="final-score"
+                                <input type="hidden" name="FinalScore"
                                     value="{{ round((bool) $finalAdjustmentPercentDetails ? round($level1AdjustedTotal, 2) + round($level2AdjustedTotal, 2) : round($level1WeightedTotal, 2) + round($level2WeightedTotal, 2), 2) }}" />
                             </tr>
                         @elseif($appraisalType == 2)
@@ -354,7 +331,7 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                                         @endif
                                     </strong>
                                 </td>
-                                <input type="hidden" name="FinalScore" class="final-score"
+                                <input type="hidden" name="FinalScore"
                                     value="{{ round((bool) $finalAdjustmentPercentDetails ? round($level1AdjustedTotal, 2) + round($level2WeightedTotal, 2) : round($level1WeightedTotal, 2) + round($level2WeightedTotal, 2), 2) }}" />
                             </tr>
                         @else
@@ -396,7 +373,7 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                                                 {{ number_format($level1AdjustedTotal, 2) }})</strong>
                                         @endif
                                     </strong></td>
-                                <input type="hidden" name="FinalScore" class="final-score"
+                                <input type="hidden" name="FinalScore"
                                     value="{{ round((bool) $finalAdjustmentPercentDetails ? round($level1AdjustedTotal, 2) : round($level1WeightedTotal, 2), 2) }}" />
                             </tr>
                         @endif

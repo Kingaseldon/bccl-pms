@@ -1053,6 +1053,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
     public function getFinalize($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+
         $settingForPayScale = DB::table("sys_settings")->where('Id', CONST_SYSSETTING_PAYSCALETYPE)->value("Value");
         $application = DB::select("select T1.Id,T1.NewPayScale,T1.FilePath,T1.LastStatusId,T2.ReportingLevel1EmployeeId, T2.ReportingLevel2EmployeeId, T1.OfficeOrderEmailed,T1.File2Path,T1.File3Path,T1.File4Path,T1.NewDesignationId,T1.NewGradeId,T1.NewLocation,T1.NewBasicPay,T1.NewGradeStepId,T1.NewSupervisorId,coalesce(T1.PMSOutcomeId,T1.SavedPMSOutcomeId) as PMSOutcomeId, T5.HasBasicPayChange, T5.HasDesignationAndLocationChange, T5.HasPayChange, T5.HasPositionChange, T1.FinalRemarks, T1.OutcomeDateTime,T1.EmployeeId,T1.WeightageForLevel1, T1.Level2CriteriaType,T1.WeightageForLevel2, T3.Name as Level1Employee, T4.Name as Level2Employee from viewpmssubmissionwithlaststatus T1 join (mas_hierarchy T2 join (mas_employee T3 join mas_position A on A.Id = T3.PositionId) on T2.ReportingLevel1EmployeeId = T3.Id left join (mas_employee T4 join mas_position B on B.Id = T4.PositionId) on T4.Id = T2.ReportingLevel2EmployeeId) on T2.EmployeeId = T1.EmployeeId left join mas_pmsoutcome T5 on T5.Id = coalesce(T1.PMSOutcomeId,T1.SavedPMSOutcomeId) where T1.Id = ? and T1.LastStatusId = ?", [$id, CONST_PMSSTATUS_APPROVED]);
         if (count($application) == 0) {
