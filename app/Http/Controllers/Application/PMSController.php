@@ -1061,6 +1061,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         }
         $details = DB::select("select T1.CIDNo,T1.EmpId,T1.MobileNo,T1.Email,Z1.Name as GradeStep, Z1.PayScale,Z1.StartingSalary,Z1.EndingSalary,Z1.Increment,T1.BasicPay,T1.ProfilePicPath,T1.Extension,T1.Name,O.Name as DesignationLocation, T2.Name as Department, T4.Name as Section, T3.Name as Position from mas_employee T1 join mas_gradestep Z1 on Z1.Id = T1.GradeStepId join mas_designation O on O.Id = T1.DesignationId join mas_department T2 on T2.Id = T1.DepartmentId left join mas_position T3 on T3.Id = T1.PositionId left join mas_section T4 on T4.Id = T1.SectionId where T1.Id = ?", [$application[0]->EmployeeId]);
 
+
         $applicationDetails = DB::select("select T2.AssessmentArea, T2.ApplicableToLevel2,T2.Weightage, T2.SelfRating, T2.Level1Rating, T2.Level2Rating from viewpmssubmissionwithlaststatus T1 join pms_submissiondetail T2 on T2.SubmissionId = T1.Id where T1.Id = ?", [$id]);
         $pmsFile = DB::table('pms_submission')->where('Id', $id)->pluck('FilePath');
         $outcomes = DB::select("select * from mas_pmsoutcome order by Id");
@@ -1095,6 +1096,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
     public function postFinalize(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
+
         $submit = $request->Submit;
 
         $id = $request->Id;
@@ -1153,6 +1155,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         $currentPMSSubmissionDate = date_format(date_create($currentPMSSubmissionDateRaw), 'Y-m-d');
 
         $pmsNumber = DB::select("select T1.Id,T1.PMSNumber, T1.EvaluationMeetingDate from sys_pmsnumber T1 where T1.StartDate <= ? order by StartDate DESC limit 1", [$currentPMSSubmissionDate]);
+
         $pmsId = $pmsNumber[0]->Id;
         DB::delete("DELETE FROM pms_historical where PMSNumberId = ? and EmpId = ?", [$pmsId, $empId]);
         DB::insert("INSERT INTO pms_historical (CIDNo,EmpId,PMSNumberId,PMSSubmissionId,PMSSCore,PMSResult,PMSRemarks) SELECT T2.CIDNo,T2.EmpId, ?,?, ?, D.Name, T1.FinalRemarks from pms_submission T1 join mas_employee T2 on T2.Id = T1.EmployeeId join mas_pmsoutcome D on D.Id = T1.PMSOutcomeId where T1.Id = ?", [$pmsId, $id, $finalScore, $id]);
@@ -1404,6 +1407,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         $newPayScale = $details[0]->NewPayScale;
         $employeeCID = $details[0]->CIDNo;
         $employeeEmpId = $details[0]->EmpId;
+
         //END
 
         if ($employeeDeptId == 1) {
