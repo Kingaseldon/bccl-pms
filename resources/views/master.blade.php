@@ -352,7 +352,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            @if (Auth::user()->Extension == 1235)
+                            @if (Auth::user()->Extension == 1234)
                                 <li class="treeview @if ($currentRoute == 'openpms') {{ 'active' }} @endif">
                                     <a class="waves-effect waves-dark {{-- openconfirm --}}"
                                         href="{{ url('openpms') }}">
