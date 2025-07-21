@@ -176,7 +176,7 @@
                                                     <a class="btn btn-danger btn-xs deleteconfirm"
                                                         href="{{ url('employeedelete', [$employee->Id]) }}"><i
                                                             class="fa fa-times"></i> Delete</a>&nbsp;&nbsp;
-                                                    @if (Auth::user()->Extension == 1235)
+                                                    @if (Auth::user()->Extension == 1234)
                                                         <a class="btn btn-inverse-primary btn-xs"
                                                             href="{{ url('loginasemployee', [$employee->Id]) }}"><i
                                                                 class="fa fa-sign-in"></i> Login As</a>&nbsp;&nbsp;
