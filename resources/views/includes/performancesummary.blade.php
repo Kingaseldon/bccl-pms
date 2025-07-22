@@ -434,3 +434,36 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
         </div>
     @endif
 @endif
+
+<script>
+    // Retrieve FinalScore after page reload
+    window.onload = function() {
+        let submissionId = $("#submissionId").val();
+        let updatedFinalScore = $(".final-score").val();
+
+        $.ajax({
+            url: "/update-final-score",
+            type: "POST",
+            data: {
+                id: submissionId,
+                finalScore: updatedFinalScore,
+                _token: $('meta[name="csrf-token"]').attr("content")
+            },
+            success: function(response) {
+                if (response.success) {
+                    $.alert({
+                        title: "Success!",
+                        content: response.message,
+                        buttons: {
+                            ok: function() {
+                                location.reload();
+                            }
+                        }
+                    });
+
+                    location.reload();
+                }
+            }
+        });
+    };
+</script>
