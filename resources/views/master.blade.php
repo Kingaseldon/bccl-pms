@@ -376,13 +376,13 @@
                                     <li
                                         class="treeview @if ($currentRoute == 'mypmsgoal') {{ 'active' }} @endif">
                                         <a class="waves-effect waves-dark " href="{{ url('mypmsgoal') }}">
-                                            <i class="fa fa-check"></i><span> Submit My PMS 1</span>
+                                            <i class="fa fa-check"></i><span> Submit Quantitative Goals</span>
                                         </a>
                                     </li>
                                 @endif
                                 <li class="treeview @if ($currentRoute == 'submitpms') {{ 'active' }} @endif">
                                     <a class="waves-effect waves-dark " href="{{ url('submitpms') }}">
-                                        <i class="fa fa-edit"></i><span> Submit My PMS 2</span>
+                                        <i class="fa fa-edit"></i><span> Submit Qualitative Goals</span>
                                     </a>
                                 </li>
                                 <li class="treeview @if ($currentRoute == 'trackpms' || $currentRoute == 'viewpmsdetails' || $currentRoute == 'resubmit') {{ 'active' }} @endif">
