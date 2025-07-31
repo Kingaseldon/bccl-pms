@@ -73,6 +73,59 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                     <td>{{ $count }}.</td>
                     <td class="description">
                         {{ $assessmentArea->AssessmentArea }}
+                        @if ($isAdmin == true)
+                            @if (isset($assessmentArea->goals) && (bool) $assessmentArea->goals)
+                                <table>
+                                    <tr>
+                                        <th>KPI</th>
+                                        <th>Weightage</th>
+                                        @if (!($application[0]->LastStatusId == CONST_PMSSTATUS_DRAFT && $application[0]->ReportingLevel1EmployeeId))
+                                            @if ($level1AppraiserCount > 1)
+                                                <?php $innerCount = 1; ?>
+                                                @foreach ($level1Appraisers as $level1Appraiser)
+                                                    <th>
+                                                        {{ $level1Appraiser->Name }}
+                                                    </th>
+                                                @endforeach
+                                            @else
+                                                <th>
+                                                    @if ($level1AppraiserCount == 1)
+                                                        {{ $application[0]->Level1Employee }}
+                                                    @else
+                                                        Level 1 Rating
+                                                    @endif
+                                                </th>
+                                            @endif
+                                        @endif
+                                    </tr>
+                                    @foreach ($assessmentArea->goals as $goal)
+                                        <tr>
+                                            <td>{{ $goal->Description }}</td>
+                                            <td>{{ $goal->Weightage }}</td>
+                                            @if (!($application[0]->LastStatusId == CONST_PMSSTATUS_DRAFT && $application[0]->ReportingLevel1EmployeeId))
+                                                @if ($level1AppraiserCount > 1)
+                                                    <?php $innerCount = 1; ?>
+                                                    @foreach ($level1Appraisers as $index => $level1Appraiser)
+                                                        <td class="text-right">
+                                                            {{ $goal->{'Level1_' . ($index + 1) . 'Score'} }}
+                                                        </td>
+                                                        <?php $innerCount++; ?>
+                                                    @endforeach
+                                                @else
+                                                    <td class="text-right">
+                                                        @if ($level1AppraiserCount == 1)
+                                                            {{ $goal->Level1Score }}
+                                                        @else
+                                                            {{ $goal->Level1Score }}
+                                                        @endif
+                                                    </td>
+                                                @endif
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            @endif
+                        @endif
                     </td>
                     <td class="text-right">
                         {{ $assessmentArea->Weightage }}
@@ -107,7 +160,7 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                                         data-id="{{ $assessmentArea->Id }}" data-type="Level1Rating" min="0"
                                         max="{{ $assessmentArea->Weightage }}"
                                         @if ($isAdmin == false) readonly disabled @endif step="any"
-                                        style="width:35%;" />
+                                        style="width:50%;" />
                                 @endif
                             @endif
                         </td>

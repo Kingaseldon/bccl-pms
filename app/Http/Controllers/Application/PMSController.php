@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\DB; //DB (query builder)
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
+use App\Models\PMSEmployeeGoal;
+use App\Models\PMSEmployeeGoalDetail;
 use PDF; //FOR PDF:: usage
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -1165,6 +1167,10 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
     public function viewPMSDetails($id, $type = null): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+
+        $currentPMSQuery = DB::table('sys_pmsnumber')->where('StartDate', '<=', date('Y-m-d'))->orderBy('StartDate', 'DESC')->pluck('Id');
+        $pmsId = $currentPMSQuery[0];
+
         $level1MultipleScore = [];
         $level2MultipleScore = [];
 
@@ -1172,9 +1178,32 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         if (count($application) == 0) {
             abort(404);
         }
-
         $details = DB::select("select T1.Email,T1.Id,T1.Extension,T1.EmpId,T1.Name,O.Name as DesignationLocation, T2.Name as Department, T4.Name as Section, T3.Name as Position from mas_employee T1 join mas_designation O on O.Id = T1.DesignationId join mas_department T2 on T2.Id = T1.DepartmentId left join mas_position T3 on T3.Id = T1.PositionId left join mas_section T4 on T4.Id = T1.SectionId where T1.Id = ?", [$application[0]->EmployeeId]);
-        $applicationDetails = DB::select("select T2.Id,T2.AssessmentArea, T2.Weightage, T2.SelfRating, T2.Level1Rating, T2.Level2Rating, T2.ApplicableToLevel2 from viewpmssubmissionwithlaststatus T1 join pms_submissiondetail T2 on T2.SubmissionId = T1.Id where T1.Id = ? order by T2.DisplayOrder", [$id]);
+        $applicationDetails = DB::select("select T2.Id, T1.EmployeeId, T2.AssessmentArea, T2.Weightage, T2.SelfRating, T2.Level1Rating, T2.Level2Rating, T2.ApplicableToLevel2, T2.EditedBy from viewpmssubmissionwithlaststatus T1 join pms_submissiondetail T2 on T2.SubmissionId = T1.Id where T1.Id = ? order by T2.DisplayOrder", [$id]);
+        $applicationDetails = collect($applicationDetails);
+        $employeeId = $application[0]->EmployeeId;
+
+        $employeeGoal = PMSEmployeeGoal::where("EmployeeId", $employeeId)->where("SysPmsNumberId", $pmsId)->first();
+        $allGoalDetails = collect();
+        if ($employeeGoal) {
+            $allGoalDetails = PMSEmployeeGoalDetail::where("EmployeeGoalId", $employeeGoal->Id)->with('pmsEmployeeGoal')->get();
+        }
+
+        foreach ($applicationDetails as $detail) {
+            if ($detail->AssessmentArea === "Work Achievement") {
+                $matchingGoalDetail = $allGoalDetails->filter(function ($goalDetailItem) use ($detail) {
+                    if ($goalDetailItem->pmsEmployeeGoal) {
+                        $goalOf = $goalDetailItem->pmsEmployeeGoal->EmployeeId;
+                        return $detail->EmployeeId === $goalOf;
+                    }
+                    return false;
+                });
+                $detail->goals = $matchingGoalDetail;
+            } else {
+                $detail->goals = null;
+            }
+        }
+
         $finalScore = DB::table('pms_submissionfinalscore')->where('SubmissionId', $id)->pluck('FinalScore');
         if (count($finalScore)):
             $finalScore = $finalScore[0];
