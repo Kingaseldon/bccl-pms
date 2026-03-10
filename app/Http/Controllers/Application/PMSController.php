@@ -2568,8 +2568,18 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             'finalScore' => 'required|numeric|min:0'
         ]);
 
+        $results = DB::table('pms_historical as a')
+            ->join('sys_pmsnumber as b', 'a.PMSNumberId', '=', 'b.PMSNumber')
+            ->join('sys_pmsnumber_dtls as c', 'b.Id', '=', 'c.SysPMSNumberId')
+            ->where('a.PMSSubmissionId', $request->id)
+            ->select('c.*')
+            ->first();
+
         try {
             $finalScore = $request->finalScore;
+            if ($results) {
+                $finalScore = ($results->AdjustedPercent / 100) * $finalScore;
+            }
 
             $updated = DB::table('pms_historical')->where('pmssubmissionid', $request->id)->update(['PMSScore' => $finalScore]);
 
@@ -2581,5 +2591,90 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error updating score.', 'error' => $e->getMessage()], 500);
         }
+    }
+
+    public function getComputeDepartmentAdjustment(Request $request)
+    {
+        $pmsNumber = DB::select("select T1.Id,T1.PMSNumber, T1.EvaluationMeetingDate from sys_pmsnumber T1 where T1.StartDate <= ? order by StartDate DESC limit 1", [date('Y-m-d')]);
+        $pmsId = $pmsNumber[0]->Id;
+        $currentPMSRound = $pmsNumber[0]->PMSNumber;
+
+        $status = DB::table('sys_pmsnumber')->where('Id', $pmsId)->pluck('Status');
+        if ($status[0] == 3 || empty($status[0])) {
+            return redirect('appraisepms')->with('errormessage', "PMS Round $currentPMSRound is closed. Please open the PMS Round before computing department adjustment.");
+        }
+
+        $today = strtotime(date('Y-m-d'));
+
+        if ($today >= strtotime(date(CONST_PMSSETTING_SECONDPMSSTARTDATE))) {
+            $finalAdjustmentPercent = DB::table('mas_pmssettings')->whereRaw('created_at >= ?', [date(CONST_PMSSETTING_SECONDPMSSTARTDATE . ' 00:00:00')])->pluck('FinalAdjustmentPercent');
+            $fromDate = date(CONST_PMSSETTING_SECONDPMSSTARTDATE);
+            $toDate = date(CONST_PMSSETTING_SECONDPMSENDDATE);
+        } else {
+            $finalAdjustmentPercent = DB::table('mas_pmssettings')->whereRaw('created_at >= ? and created_at <= ?', [date(CONST_PMSSETTING_FIRSTPMSSTARTDATE . ' 00:00:00'), date(CONST_PMSSETTING_FIRSTPMSENDDATE . ' 23:59:59')])->pluck('FinalAdjustmentPercent');
+            $fromDate = date(CONST_PMSSETTING_FIRSTPMSSTARTDATE);
+            $toDate = date(CONST_PMSSETTING_FIRSTPMSENDDATE);
+        }
+
+        // get only those department, that were not computed BFA
+        $departments = DB::table('mas_department')
+            ->whereNotIn('Id', function ($query) use ($fromDate, $toDate) {
+                $query->select('d.DepartmentId')
+                    ->from('pms_submission', 'a')
+                    ->join('pms_historical as b', 'a.Id', '=', 'b.PMSSubmissionId')
+                    ->join('sys_pmsnumber as c', 'b.PMSNumberId', '=', 'c.PMSNumber')
+                    ->join('sys_pmsnumber_dtls as d', 'c.Id', '=', 'd.SysPMSNumberId')
+                    ->whereBetween('a.SubmissionTime', [$fromDate, $toDate])
+                    ->groupBy('d.DepartmentId');
+            })
+            ->orderBy('Name', 'ASC')
+            ->get();
+
+        return view('application.computeadjustmentdeptwise', ['departments' => $departments, 'finalAdjustmentPercent' => $finalAdjustmentPercent]);
+    }
+
+    public function postComputeDepartmentAdjustment(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    {
+        $targetRevenue = $request->DepartmentTargetRevenue;
+        $achievedRevenue = $request->DepartmentAchievedRevenue;
+        $DepartmentId = $request->DepartmentId;
+
+        $finalAdjustmentValue = $request->DepartmentAdjustementValue;
+
+        $finalAdjustmentPercentage = $finalAdjustmentValue * 100; // convert to percentage
+
+        $currentPMSQuery = DB::table('sys_pmsnumber')->where('StartDate', '<=', date('Y-m-d'))->orderBy('StartDate', 'DESC')->pluck('Id');
+        $pmsId = $currentPMSQuery[0];
+        DB::table('sys_pmsnumber_dtls')
+            ->insert([
+                'SysPMSNumberId' => $pmsId,
+                'DepartmentId' => $DepartmentId,
+                'AdjustedPercent' => $finalAdjustmentPercentage,
+                'DepartmentTargetRevenue' => $targetRevenue,
+                'DepartmentAchievedRevenue' => $achievedRevenue
+            ]);
+
+        $today = strtotime(date('Y-m-d'));
+        if ($today >= strtotime(date(CONST_PMSSETTING_SECONDPMSSTARTDATE))) {
+            $id = DB::table('mas_pmssettings')->whereRaw('created_at >= ?', [date(CONST_PMSSETTING_SECONDPMSSTARTDATE . ' 00:00:00')])->pluck('Id');
+            $fromDate = date(CONST_PMSSETTING_SECONDPMSSTARTDATE . ' 00:00:00');
+            $toDate = date(CONST_PMSSETTING_SECONDPMSENDDATE . ' 23:59:59');
+        } else {
+            $id = DB::table('mas_pmssettings')->whereRaw('created_at >= ? and created_at <= ?', [date(CONST_PMSSETTING_FIRSTPMSSTARTDATE . ' 00:00:00'), date(CONST_PMSSETTING_FIRSTPMSENDDATE . ' 23:59:59')])->pluck('Id');
+            $fromDate = date(CONST_PMSSETTING_FIRSTPMSSTARTDATE . ' 00:00:00');
+            $toDate = date(CONST_PMSSETTING_FIRSTPMSENDDATE . ' 23:59:59');
+        }
+
+        if ($id->isEmpty()) {
+            DB::table('mas_pmssettings')->insert(['Id' => UUID(), 'FinalAdjustmentPercent' => $finalAdjustmentPercentage, 'CreatedBy' => Auth::id(), 'created_at' => date('Y-m-d H:i:s')]);
+        } else {
+            DB::table('mas_pmssettings')->where('Id', $id)->update(['FinalAdjustmentPercent' => $finalAdjustmentPercentage, 'EditedBy' => Auth::id(), 'updated_at' => date('Y-m-d H:i:s')]);
+        }
+
+        DB::statement("call ComputeDepartmentFinalScore(?,?,?,?)", [$fromDate, $toDate, $DepartmentId, $finalAdjustmentValue]);
+
+        $department = DB::table('mas_department')->where('Id', $DepartmentId)->first();
+
+        return redirect('computedepartmentadjustment')->with('successmessage', $finalAdjustmentPercentage . "% revenue score adjustment has been applied to employees of '" . $department->Name . "' department's PMS Scores.");
     }
 }
