@@ -1064,7 +1064,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         $details = DB::select("select T1.CIDNo,T1.EmpId,T1.MobileNo,T1.Email,Z1.Name as GradeStep, Z1.PayScale,Z1.StartingSalary,Z1.EndingSalary,Z1.Increment,T1.BasicPay,T1.ProfilePicPath,T1.Extension,T1.Name,O.Name as DesignationLocation, T2.Name as Department, T4.Name as Section, T3.Name as Position from mas_employee T1 join mas_gradestep Z1 on Z1.Id = T1.GradeStepId join mas_designation O on O.Id = T1.DesignationId join mas_department T2 on T2.Id = T1.DepartmentId left join mas_position T3 on T3.Id = T1.PositionId left join mas_section T4 on T4.Id = T1.SectionId where T1.Id = ?", [$application[0]->EmployeeId]);
 
 
-        $applicationDetails = DB::select("select T2.AssessmentArea, T2.ApplicableToLevel2,T2.Weightage, T2.SelfRating, T2.Level1Rating, T2.Level2Rating from viewpmssubmissionwithlaststatus T1 join pms_submissiondetail T2 on T2.SubmissionId = T1.Id where T1.Id = ?", [$id]);
+        $applicationDetails = DB::select("select T2.Id, T2.AssessmentArea, T2.ApplicableToLevel2,T2.Weightage, T2.SelfRating, T2.Level1Rating, T2.Level2Rating from viewpmssubmissionwithlaststatus T1 join pms_submissiondetail T2 on T2.SubmissionId = T1.Id where T1.Id = ?", [$id]);
         $pmsFile = DB::table('pms_submission')->where('Id', $id)->pluck('FilePath');
         $outcomes = DB::select("select * from mas_pmsoutcome order by Id");
         $gradesteps = DB::table('mas_gradestep as T1')
@@ -1072,6 +1072,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             ->select('T1.Id', 'T1.Name as GradeStep', 'T1.PayScale', 'T1.StartingSalary', 'T1.Increment', 'T1.EndingSalary')
             ->orderBy(DB::raw('T1.StartingSalary'))
             ->get();
+        // dd($applicationDetails);
 
         $empId = $details[0]->EmpId;
         $payRaiseSlabs = DB::select("SELECT * FROM mas_pay_scale_slab ORDER BY Raise");
@@ -1092,8 +1093,12 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         $supervisors = DB::select("select Id, Name from mas_supervisor order by Name");
         $grades = DB::select("select Id, Name from mas_grade where coalesce(IsManagerialRole,0) = 1 and Id <> 9 order by Name");
         $pmsMultiple = DB::select("select T1.FilePath, T1.ForLevel, T1.AppraisedByEmployeeId, T2.Name as Appraiser from pms_submissionmultiple T1 join mas_employee T2 on T1.AppraisedByEmployeeId = T2.Id where T1.SubmissionId = ? and T1.FilePath is not null order by T1.created_at", [$id]);
-
-        return view('application.pmsfinalize')->with('settingForPayScale', $settingForPayScale)->with('level1AppraiserCount', 0)->with('level2AppraiserCount', 0)->with('pmsMultiple', $pmsMultiple)->with('grades', $grades)->with('history', $history)->with('finalScore', $finalScore)->with('designations', $designations)->with('positions', $positions)->with('gradesteps', $gradesteps)->with('outcomes', $outcomes)->with('pmsFile', $pmsFile[0])->with('application', $application)->with('applicationDetails', $applicationDetails)->with('details', $details)->with('disciplinaryDetails', $disciplinaryDetails)->with('supervisors', $supervisors)->with('payRaiseSlabs', $payRaiseSlabs);
+        $roleId = Auth::user()->RoleId;
+        $isAdmin = false;
+        if ((int)$roleId === 1) {
+            $isAdmin = true;
+        }
+        return view('application.pmsfinalize')->with('settingForPayScale', $settingForPayScale)->with('level1AppraiserCount', 0)->with('level2AppraiserCount', 0)->with('pmsMultiple', $pmsMultiple)->with('grades', $grades)->with('history', $history)->with('finalScore', $finalScore)->with('designations', $designations)->with('positions', $positions)->with('gradesteps', $gradesteps)->with('outcomes', $outcomes)->with('pmsFile', $pmsFile[0])->with('application', $application)->with('applicationDetails', $applicationDetails)->with('details', $details)->with('disciplinaryDetails', $disciplinaryDetails)->with('supervisors', $supervisors)->with('payRaiseSlabs', $payRaiseSlabs)->with('isAdmin', $isAdmin);
     }
 
     public function postFinalize(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
