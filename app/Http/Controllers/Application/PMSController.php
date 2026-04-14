@@ -1458,7 +1458,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
         $notOrder = false;
         switch ($pmsOutcomeId):
             case 14:
-                $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept, Tashi InfoComm Limited, is hereby awarded Positional Promotion. <br/><br/><strong><em>$employeeName's</strong></em> change in position shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em> and details are mentioned below:";
+                $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept,Bhutan Carbide and Chemicals Limited, is hereby awarded Positional Promotion. <br/><br/><strong><em>$employeeName's</strong></em> change in position shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em> and details are mentioned below:";
                 $content .= "<br/><table style='margin-top:10px;'>
                                     <tr>
                                         <th style='padding:0 4px 2px 4px;'>Old Position</th>
@@ -1474,7 +1474,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                        3. Office copy";
                 break;
             case 15:
-                $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept, Tashi InfoComm Limited, is hereby awarded Positional Promotion and Single Increment on the existing salary. <br/><br/><strong><em>$employeeName's</strong></em> change in position shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em> and details are mentioned below:";
+                $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept,Bhutan Carbide and Chemicals Limited, is hereby awarded Positional Promotion and Single Increment on the existing salary. <br/><br/><strong><em>$employeeName's</strong></em> change in position shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em> and details are mentioned below:";
                 $content .= "<br/><table style='margin-top:10px;'>
                                     <tr>
                                         <th style='padding:0 4px 2px 4px;'>Old Position</th>
@@ -1501,36 +1501,21 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                        2. $employeeName<br/>
                        3. Office copy";
                 break;
-            case 2:
-                $content = "In appreciation of your hard work, the management is pleased to grant you <strong><em>$paySlab</em></strong> special increments in the same grade. <br/><br/> Your revised Basic salary would be <strong><em>Nu. $newBasicPay</em></strong> from <strong><em>Nu. $basicPay</em></strong> per month with effect from <strong><em>$effectiveDate</em></strong>.<br/><br/>";
-                $content .= "Other service condition would be as per the appointment order and service rules of the company. The management hopes that you will continue your good work in promotion the par excellence of working ethic in the company. <br/><br/> For Bhutan Carbide and Chemical Limited. <br/>";
+            case 2: //increment order
 
-                // $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept, Tashi InfoComm Limited, is hereby awarded a Single Increment on the existing salary.<br/><br/>The Single Increment shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em>. Salary and grade details are mentioned below:";
-                // $content .= "<br/><table style='margin-top:10px;'>
-                //                     <tr>
-                //                         <th style='padding:0 4px 2px 4px;'>Grade & Pay Scale</th>
-                //                         <th style='padding:0 4px 2px 4px;'>Basic Salary (Old)</th>
-                //                         <th style='padding:0 4px 2px 4px;'>Basic Salary (New)</th>
-                //                     </tr>
-                //                     <tr>
-                //                         <td style='padding:0 4px 2px 4px;'>$gradeStep ($payScale)</td>
-                //                         <td style='padding:0 4px 2px 4px;'><center>$basicPay</center></td>
-                //                         <td style='padding:0 4px 2px 4px;'><center>$newBasicPay</center></td>
-                //                     </tr>
-                //             </table>";
-                // $cc = "1. $hodLabel, $employeeDept<br/>
-                //        2. General Manager, Finance Department<br/>
-                //        3. $employeeName<br/>
-                //        4. Office copy";
+                $content = "<strong>Subject: Increment Order</strong> <br/><br/>";
+                $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>
+                In appreciation of your hard work and commitments you displayed towards the company, the management is pleased to grant you <strong><em>$paySlab</em></strong> special increments in the same position level. <br/><br/> Your new Basic salary would be <strong><em>Nu. $newBasicPay</em></strong> from <strong><em>Nu. $basicPay</em></strong> per month with effect from <strong><em>$effectiveDate</em></strong>.<br/><br/>";
 
-                $cc = "1. President <br/>
-                       2. Chief Executive (Management Rep.) <br/>
-                       3. General Manager, Operation <br/>
-                       4. HOD / Finance & Accounts <br/>
-                       5. Personal file";
+                $content .= "All other terms and conditions of your service shall be as per the appointment order and the service rule of the company. The management hopes that you will continue to work hard and demonstrate better performance in future. <br/>";
+
+
+
+                $cc = "1. HOD of HRAD & F/A – for necessary action <br/>
+                       2. Personal file";
                 break;
             case 3:
-                $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept, Tashi InfoComm Limited, is hereby awarded a Double Increment on the existing salary.<br/><br/>The Double Increment shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em>. Salary and grade details are mentioned below:";
+                $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept,Bhutan Carbide and Chemicals Limited, is hereby awarded a Double Increment on the existing salary.<br/><br/>The Double Increment shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em>. Salary and grade details are mentioned below:";
                 $content .= "<br/><table style='margin-top:10px;'>
                                     <tr>
                                         <th style='padding:0 4px 2px 4px;'>Grade & Pay Scale</th>
@@ -1548,105 +1533,81 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                        3. $employeeName<br/>
                        4. Office copy";
                 break;
-            case 4:
-                $content = "Considering the exemplary initiatives taken at work in your department, the management recognizes your sincere, dedicated service hard work and initiatives at work. In appreciation of your good conduct, the management is pleased to promote you to next higher level " . ($newEmployeeDesignation ? "as <strong><em>$newEmployeeDesignation &nbsp;($newGradeStep)</em></strong>." : "to <strong><em>($newGradeStep)</em></strong>.") . " <br/><br/> Your revised Basic Pay Salary would be <strong><em>Nu. $newBasicPay </em></strong> only in <strong><em>$newGradeStep</em></strong> in the pay scale of <strong><em>($newPayScale)</em></strong>, with effect from <strong><em>$effectiveDate</em></strong> <br/><br/>";
-                $content .= "Other service condition would be as per the appointment order and service rules of the company. The management hopes that you will continue your good work in promotion the par excellence of work ethic in the company. <br/><br/> For Bhutan Carbide and Chemicals Limited. <br/>";
+            case 4: //promotion
 
-                // $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept, Tashi InfoComm Limited, is hereby awarded a Single Grade Promotion and shall be promoted from $pronoun current grade $gradeStep to $newGradeStep.<br/><br/>$employeeName" . "’s promotion shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em>. Salary and grade details are mentioned below:";
-                // $content .= "<br/><table style='margin-top:10px;'>
-                //                     <tr>
-                //                         <th style='padding:0 4px 2px 4px;'>Grade & Pay Scale (Old)</th>
-                //                         <th style='padding:0 4px 2px 4px;'>Grade & Pay Scale (New)</th>
-                //                         <th style='padding:0 4px 2px 4px;'>Basic Salary (Old)</th>
-                //                         <th style='padding:0 4px 2px 4px;'>Basic Salary (New)</th>
-                //                     </tr>
-                //                     <tr>
-                //                         <td style='padding:0 4px 2px 4px;'>$gradeStep ($payScale)</td>
-                //                         <td style='padding:0 4px 2px 4px;'>$newGradeStep ($newPayScale)</td>
-                //                         <td style='padding:0 4px 2px 4px;'><center>$basicPay</center></td>
-                //                         <td style='padding:0 4px 2px 4px;'><center>$newBasicPay</center></td>
-                //                     </tr>
-                //             </table>";
-                // $cc = "1. $hodLabel, $employeeDept<br/>
-                //        2. General Manager, Finance Department<br/>
-                //        3. $employeeName<br/>
-                //        4. Office copy";
+                $content = "<strong>Subject: Promotion Order</strong> <br/><br/>";
+                $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>";
+                $content .= "We are pleased to inform you that, in recognition of your commendable performance, consistent hard work, and significant responsibilities you have shouldered, the management has approved your promotion to " . ($newEmployeeDesignation ? " as <strong><em>$newEmployeeDesignation ($employeeDept) &nbsp;$newGradeStep (Position Level)</em></strong>." : "to <strong><em>$newGradeStep (Position Level)</em></strong>.") . "
+                 with revised Basic Pay Salary of <strong><em>Nu. $newBasicPay </em></strong> per month with the pay scale of <strong><em>($newPayScale)</em></strong>, with effect from <strong><em>$effectiveDate</em></strong> <br/><br/> ";
 
-                $cc = "1. President <br/>
-                       2. Chief Executive (Management Rep.) <br/>
-                       3. General Manager, Operation <br/>
-                       4. HOD / Finance & Accounts <br/>
-                       5. Personal file";
+                $content .= "Your commitment, efficiency, and professional input have significantly contributed to the overall success of <strong>$employeeDept</strong>. We sincerely appreciate your effort and positive impact of your work. We trust that you will maintain, and indeed surpass, this level of performance in the future. <br/>
+                All other service terms shall be as per the appointment order and service rule of the company in force. <strong>You will be given a separate set of additional responsibilities if your new position demands. (This is subject to discussion) </strong/> </br></br>
+
+                ";
+                // if (!is_null($HraAllowance)) {
+                //     $content .= "Additional allowance is prescribed below:<br/>
+                //      &nbsp;&nbsp; 1. House Rent Allowance (HRA) - <strong><em>Nu. $HraAllowance ($HraAllowanceWords)</em></strong> <br/><br/>";
+                // }
+
+                $content .= "Wishing you continued sucess in your role. <br/><br/> Warm Regards <br/>";
+
+
+
+                $cc = "1. HOD of HRAD % F/A - fro nescessary action <br/>
+                       2. Personal file";
                 break;
-            case 5:
-                $content = "In pursuant to the decision taken by the Management Committee during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate, <strong><em>$employeeName</strong></em>, holding Citizenship Identity Card number <strong><em>$employeeCID</strong></em>, $employeeDesignation under $employeeDept, Tashi InfoComm Limited, is hereby awarded a Double Grade Promotion and shall be promoted from $pronoun current grade $gradeStep to $newGradeStep.<br/><br/>$employeeName" . "’s promotion shall be implemented <strong><em>w.e.f. $effectiveDate</strong></em>. Salary and grade details are mentioned below:";
-                $content .= "<br/><table style='margin-top:10px;'>
-                                    <tr>
-                                        <th style='padding:0 4px 2px 4px;'>Grade & Pay Scale (Old)</th>
-                                        <th style='padding:0 4px 2px 4px;'>Grade & Pay Scale (New)</th>
-                                        <th style='padding:0 4px 2px 4px;'>Basic Salary (Old)</th>
-                                        <th style='padding:0 4px 2px 4px;'>Basic Salary (New)</th>
-                                    </tr>
-                                    <tr>
-                                        <td style='padding:0 4px 2px 4px;'>$gradeStep ($payScale)</td>
-                                        <td style='padding:0 4px 2px 4px;'>$newGradeStep ($newPayScale)</td>
-                                        <td style='padding:0 4px 2px 4px;'><center>$basicPay</center></td>
-                                        <td style='padding:0 4px 2px 4px;'><center>$newBasicPay</center></td>
-                                    </tr>
-                            </table>";
-                $cc = "1. $hodLabel, $employeeDept<br/>
-                       2. General Manager, Finance Department<br/>
-                       3. $employeeName<br/>
-                       4. Office copy";
-                break;
+
             case 13:
-                $cc = "1. TICL Management Committee members, for information<br/>
+                $cc = "1. TMPL Management Committee members, for information<br/>
                        2. $hodLabel, $employeeDept for necessary action<br/>
                        3. Executive Manager, Human Resource and Administration Department for record and necessary action<br/>
                        4. $employeeName, for information<br/>";
                 break;
-            case 12:
-                $prepend = "<br/><strong>Mr./Ms.:</strong> $employeeName <br/>
-                                <strong>Citizenship Identity Card Number:</strong> $employeeCID <br/>
-                                <strong>Designation:</strong> $employeeDesignation <br/>
-                                <strong>Section:</strong> $employeeSection <br/>
-                                <strong>Department:</strong> $employeeDept <br/>
-                                <strong>Tashi InfoComm Limited</strong>";
-                $prepend .= "<h3><center><strong><u>SUBJECT:	LETTER ASKING IMPROVEMENT</u></strong></center></h3>";
-                $content = $prepend . $content;
-                $cc = "1. $hodLabel, $employeeDept for necessary action<br/>
-                       2. Office Copy";
+            case 12: //letter of asking improvement
+                $content = "<strong>Subject: PIP Notice</strong> <br/><br/>";
+                $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>";
+                $content .= "The performance assessment for the PMS Cycle $currentPmsNumber for the period $startDate is completed and it was observed that your scores fall below expectation level apparently indicating your unsatisfactory performance. This level of performance is not expected from the employees when company is striving to set a performance-driven culture to keep abreast with evolving time.<br/></br>";
+
+                $content .= "Therefore, you will be placed in the <strong>Performance Improvement Period (PIP)</strong> for the next six months and your performance will be strictly monitored by your immediate supervisors (both Level I and Level 2). You are expected to prove yourself during this period or else your service with the company shall be discontinued on the ground of recurrent underperformance</br></br>";
+                $content .= "The observation was apprised to the Management Review Committee and the committee has endorsed it. <br/></br>
+                            Looking forward to your understanding and improvement<br/></br>
+                            ";
+
+
+                $cc = "1.HOD of HRAD & F/A - for necessary action<br/>
+                       2. Concerned HOD
+                       3.  Personal File";
+                // $notOrder = true;
+                break;
+            case 10: //letter of improvement
+                $content = "<strong>Subject: PIP Notice</strong> <br/><br/>";
+                $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>";
+                $content .= "The performance assessment for the PMS Cycle $currentPmsNumber for the period $startDate is completed and it was observed that your scores fall below expectation level apparently indicating your unsatisfactory performance. This level of performance is not expected from the employees when company is striving to set a performance-driven culture to keep abreast with evolving time. <br/></br>";
+
+                $content .= "Therefore, you will be placed in the <strong>Performance Improvement Period (PIP)</strong> for the next six months and your performance will be strictly monitored by your immediate supervisors (both Level I and Level 2). You are expected to prove yourself during this period or else your service with the company shall be discontinued on the ground of recurrent underperformance</br></br>";
+                $content .= "The observation was apprised to the Management Review Committee and the committee has endorsed it. <br/></br/>
+                            Looking forward to your understanding and improvement<br/></br>
+                            ";
+
+
+                $cc = "1.HOD of HRAD & F/A - for necessary action<br/>
+                       2. Concerned HOD
+                       3.  Personal File";
+                // $notOrder = true;
+
+                break;
+            case 11: //appreciation letter
+                $content = "<strong>Subject: Letter of Appreciation for Outstanding/Star Performance</strong> <br/><br/>";
+                $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>";
+                $content .= "I am writing this letter to express my sincere appreciation for your <strong><em>Outstanding/Star (Exceptional)</em></strong> performance during the recent PMS cycle. This remarkable performance is a testament to your consistent hard work, unwavering commitment and resilient discharge of your duty.</br></br>";
+                $content .= "This remarkable performance not only demonstrates your professional proficiency and personal commitment towards your work but also sets an exemplary standard to other employees in the company. As a token of our gratitude and recognition kindly accept this letter of appreciation and I look forward to your continued and even better performance in future.";
+
+
+                $cc = "1. HOD of HRAD R F/A - for necessary action<br/>
+                       2. Personal File";
                 $notOrder = true;
                 break;
-            case 10:
-                $prepend = "<br/><strong>Mr./Ms.:</strong> $employeeName <br/>
-                                <strong>Citizenship Identity Card Number:</strong> $employeeCID <br/>
-                                <strong>Designation:</strong> $employeeDesignation <br/>
-                                <strong>Section:</strong> $employeeSection <br/>
-                                <strong>Department:</strong> $employeeDept <br/>
-                                <strong>Tashi InfoComm Limited</strong>";
-                $prepend .= "<h3><center><strong><u>LETTER OF IMPROVEMENT</u></strong></center></h3>";
-                $content = $prepend . $content;
-                $cc = "1. $hodLabel, $employeeDept for necessary action<br/>
-                       2. Executive Manager, Human Resource and Administration <br/>
-                       3. Office Copy";
-                $notOrder = true;
-                break;
-            case 11:
-                $content = "The Management of Tashi InfoComm Limited would like to award this Letter of Appreciation in pursuant to the decision taken during the <strong><em>$currentPmsNumber Performance Evaluation Meeting</strong></em> held on $evaluationMeetingDate. The letter represents deep appreciation and recognition of your hard work and contribution towards the company in the last six months between $startingDateOfLastPMS and $endingDateOfLastPMS.<br/><br/>You have exhibited commitment, honesty and sincerity. Your hard work and all the extra efforts that you have put forth has not gone unnoticed. The Management is happy with your performance and contribution to the company.<br/><br/>Keep on contributing to the company’s growth in the future too.<br/><br/>All the best";
-                $prepend = "<br/><strong>Mr./Ms.:</strong> $employeeName <br/>
-                                <strong>Citizenship Identity Card Number:</strong> $employeeCID <br/>
-                                <strong>Designation:</strong> $employeeDesignation <br/>
-                                <strong>Section:</strong> $employeeSection <br/>
-                                <strong>Department:</strong> $employeeDept <br/>
-                                <strong>Tashi InfoComm Limited</strong>";
-                $prepend .= "<h3><center><strong><u>LETTER OF APPRECIATION</u></strong></center></h3>";
-                $content = $prepend . $content;
-                $cc = "1. $hodLabel, $employeeDept for necessary action<br/>
-                       2. Office Copy";
-                $notOrder = true;
-                break;
-            case 8:
+            case 8: //letter of last warning
                 $prepend = "<br/><strong>Mr./Ms.:</strong> $employeeName <br/>
                                 <strong>Citizenship Identity Card Number:</strong> $employeeCID <br/>
                                 <strong>Designation:</strong> $employeeDesignation <br/>
@@ -1666,7 +1627,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             return view('printpages.officeorder', ['notOrder' => $notOrder, 'cc' => $cc, 'content' => $content, 'referenceNo' => $referenceNo, 'date' => $date, 'employeeName' => $employeeName, 'employeeEmpId' => $employeeEmpId, 'newEmployeeDesignation' => $newEmployeeDesignation, 'pmsOutcomeId' => $pmsOutcomeId, 'employeeDesignation' => $employeeDesignation]);
         }
 
-        $pdf = PDF::loadView('printpages.officeorder', ['notOrder' => $notOrder, 'cc' => $cc, 'content' => $content, 'referenceNo' => $referenceNo, 'date' => $date, 'employeeName' => $employeeName, 'employeeEmpId' => $employeeEmpId, 'newEmployeeDesignation' => $newEmployeeDesignation, 'pmsOutcomeId' => $pmsOutcomeId, 'employeeDesignation' => $employeeDesignation]);
+        $pdf = PDF::loadView('printpages.officeorder', ['notOrder' => $notOrder, 'cc' => $cc, 'content' => $content, 'referenceNo' => $referenceNo, 'date' => $date, 'employeeName' => $employeeName, 'employeeEmpId' => $employeeEmpId, 'newEmployeeDesignation' => $newEmployeeDesignation, 'pmsOutcomeId' => $pmsOutcomeId, 'employeeDesignation' => $employeeDesignation, 'employeeDept' => $employeeDept]);
         $pdf->set_option('isRemoteEnabled', TRUE);
         $content = $pdf->download()->getOriginalContent();
         $path = 'public/officeorders/' . date('Y') . "/Office Order for $employeeName _ $employeeEmpId _ " . date('Y_m_d') . ".pdf";
@@ -1694,7 +1655,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             if ($empEmailAddress && $empEmailAddress != '@tashicell.com') {
                 $env = (config('app.env'));
                 // if ($env == "local") {
-                $filePath = str_replace("https://bod.tashicell.com/storage/officeorders", "storage/officeorders", $filePath);
+                $filePath = str_replace("https://bccl.tashicell.com//storage/officeorders", "storage/officeorders", $filePath);
                 // }
                 $this->sendMail($empEmailAddress, "Dear $empName, <br/> Please find attached your Office Order for <strong>$empPMSOutcome</strong> for the PMS Round $currentPMSNumber", "Office Order for PMS Round $currentPMSNumber", null, null, $filePath);
                 DB::table('pms_submission')->where('Id', $submissionId)->update(['OfficeOrderEmailed' => 1]);
