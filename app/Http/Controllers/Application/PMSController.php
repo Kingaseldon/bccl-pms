@@ -1541,7 +1541,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                  with revised Basic Pay Salary of <strong><em>Nu. $newBasicPay </em></strong> per month with the pay scale of <strong><em>($newPayScale)</em></strong>, with effect from <strong><em>$effectiveDate</em></strong> <br/><br/> ";
 
                 $content .= "Your commitment, efficiency, and professional input have significantly contributed to the overall success of <strong>$employeeDept</strong>. We sincerely appreciate your effort and positive impact of your work. We trust that you will maintain, and indeed surpass, this level of performance in the future. <br/>
-                All other service terms shall be as per the appointment order and service rule of the company in force. <strong>You will be given a separate set of additional responsibilities if your new position demands. (This is subject to discussion) </strong/> </br></br>
+                All other service terms shall be as per the appointment order and service rule of the company in force. </br></br>
 
                 ";
                 // if (!is_null($HraAllowance)) {
