@@ -139,8 +139,8 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
 
             {{-- @if (!$notOrder)
                 <h3><center><strong><u>OFFICE ORDER</u></strong></center></h3>
-            @endif
-            {!! $content !!} --}}
+            @endif --}}
+            {!! $content !!}
         </div>
         <table style="border:none;">
 
