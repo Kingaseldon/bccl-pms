@@ -150,7 +150,9 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
             <br />
             <tr>
                 <td colspan="2" style="border:none;">
-                    <strong>(Authorised Signatory)</strong>
+                    <strong>(Name of Competent Signature) <br />
+                        Position Title
+                    </strong>
                 </td>
             </tr>
 
