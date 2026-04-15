@@ -99,7 +99,7 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
 
     </footer>
 
-    <main style="padding-left:13px;padding-right:13px;padding-top:10px;">
+    <main style="padding-left:13px;padding-right:13px;padding-top:20px;">
         <div>
             <table style="width:100%;border:none;">
                 <tr>
@@ -150,8 +150,8 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
             <br />
             <tr>
                 <td colspan="2" style="border:none;">
-                    <strong>(Name of Competent Signature) <br />
-                        Position Title
+                    <strong>
+                        (Human Resources &amp; Administration)<br>
                     </strong>
                 </td>
             </tr>
