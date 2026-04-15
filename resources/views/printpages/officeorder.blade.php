@@ -151,7 +151,7 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
             <tr>
                 <td colspan="2" style="border:none;">
                     <strong>
-                        (Human Resources &amp; Administration)<br>
+                        (HRA)<br>
                     </strong>
                 </td>
             </tr>
