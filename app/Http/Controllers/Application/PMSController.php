@@ -1553,7 +1553,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
 
 
-                $cc = "1. HOD of HRAD F/A - for nescessary action <br/>
+                $cc = "1. HOD of HRAD & F/A - for nescessary action <br/>
                        2. Personal file";
                 break;
 
@@ -1603,7 +1603,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                 $content .= "This remarkable performance not only demonstrates your professional proficiency and personal commitment towards your work but also sets an exemplary standard to other employees in the company. As a token of our gratitude and recognition kindly accept this letter of appreciation and I look forward to your continued and even better performance in future.";
 
 
-                $cc = "1. HOD of HRAD R F/A - for necessary action<br/>
+                $cc = "1. HOD of HRAD & F/A - for necessary action<br/>
                        2. Personal File";
                 $notOrder = true;
                 break;
