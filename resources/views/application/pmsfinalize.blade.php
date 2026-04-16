@@ -88,7 +88,7 @@
                                             <td style="padding-left:25px;">{{ $userDetail->BasicPay }}</td>
                                         </tr>
                                         <tr>
-                                            <th style="width:50%;">Grade/Step <span
+                                            <th style="width:50%;">Position Level <span
                                                     class="pull-right d-none d-sm-block">:</span> &nbsp;&nbsp;</th>
                                             <td style="padding-left:25px;"> {{ $userDetail->GradeStep }}</td>
                                         </tr>
@@ -180,7 +180,7 @@
                                 </div>
                             </div>
                         </div>
-               
+
                         <?php
                         $basicPay = str_replace(',', '', $userDetail->BasicPay);
                         $increment = $userDetail->Increment;
@@ -199,7 +199,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="Grade" class="control-label">New Grade / Step</label>
+                                            <label for="Grade" class="control-label">New Position Level</label>
                                             <select data-payscaletype="{{ (int) $settingForPayScale }}"
                                                 name="NewGradeStepId" id="Grade" class="form-control select2">
                                                 <option value="">N/A</option>
