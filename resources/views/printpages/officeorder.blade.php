@@ -120,7 +120,9 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
                 <tr>
                     @if ($pmsOutcomeId === '4')
                         <td style='width:50%;border:none;'>
-                            <strong>{{ $newEmployeeDesignation ?? $employeeDesignation }}, ({{ $employeeDept }})
+                            <strong>
+                                {{ $newEmployeeDesignation ?? $employeeDesignation }} <br>
+                                {{ $employeeDept }}
                             </strong>
                         </td>
                     @else
