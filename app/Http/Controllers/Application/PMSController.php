@@ -1505,7 +1505,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
                 $content = "<strong>Subject: Increment Order</strong> <br/><br/>";
                 $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>
-                In appreciation of your hard work and commitments you displayed towards the company, the management is pleased to grant you <strong><em>$paySlab</em></strong> special increment(s) in the same position level. <br/><br/> Your new Basic salary would be <strong><em>Nu. $newBasicPay</em></strong> from <strong><em>Nu. $basicPay</em></strong> per month with effect from <strong><em>$effectiveDate</em></strong>.<br/><br/>";
+                In appreciation of your hard work and commitments you displayed towards the company, the management is pleased to grant you <strong><em>$paySlab</em></strong> special increment(s) in the same position level. <br/><br/> Your new Basic salary would be <strong><em>Nu. $newBasicPay</em></strong> per month with effect from <strong><em>$effectiveDate</em></strong>.<br/><br/>";
 
                 $content .= "All other terms and conditions of your service shall be as per the appointment order and the service rule of the company. The management hopes that you will continue to work hard and demonstrate better performance in future. <br/>";
 
@@ -1597,7 +1597,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
                 break;
             case 11: //appreciation letter
-                $content = "<strong>Subject: Letter of Appreciation for Outstanding/Star Performance</strong> <br/><br/>";
+                $content = "<strong>Subject: Letter of Appreciation</strong> <br/><br/>";
                 $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>";
                 $content .= "I am writing this letter to express my sincere appreciation for your <strong><em>Outstanding/Star (Exceptional)</em></strong> performance during the recent PMS cycle. This remarkable performance is a testament to your consistent hard work, unwavering commitment and resilient discharge of your duty.</br></br>";
                 $content .= "This remarkable performance not only demonstrates your professional proficiency and personal commitment towards your work but also sets an exemplary standard to other employees in the company. As a token of our gratitude and recognition kindly accept this letter of appreciation and I look forward to your continued and even better performance in future.";

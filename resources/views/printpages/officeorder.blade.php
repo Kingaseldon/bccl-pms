@@ -120,22 +120,16 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
                 <tr>
                     @if ($pmsOutcomeId === '4')
                         <td style='width:50%;border:none;'>
-                            <strong>
-                                {{ $newEmployeeDesignation ?? $employeeDesignation }} <br>
-                                {{ $employeeDept }}
+                            <strong>{{ $newEmployeeDesignation ?? $employeeDesignation }} <br> {{ $employeeDept }}
                             </strong>
                         </td>
                     @else
-                        <td style='width:50%;border:none;'><strong>{{ $employeeDesignation }},
-                                ({{ $employeeDept }})</strong></td>
+                        <td style='width:50%;border:none;'><strong>{{ $employeeDesignation }} <br>
+                                {{ $employeeDept }}</strong></td>
                     @endif
                 </tr>
 
-                <tr>
-                    <td style='width:50%;border:none;'>
-                        <strong>Bhutan Carbide and Chemical Limited</strong>
-                    </td>
-                </tr>
+
             </table>
             <br />
 
@@ -145,6 +139,13 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
             {!! $content !!}
         </div>
         <table style="border:none;">
+            <br />
+            <br />
+            <tr>
+                <td style='width:50%;border:none;'>
+                    For <strong>Bhutan Carbide and Chemical Limited</strong>
+                </td>
+            </tr>
 
             <br />
             <br />
@@ -153,7 +154,7 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
             <tr>
                 <td colspan="2" style="border:none;">
                     <strong>
-                        (HRA)<br>
+                        (Human Resources & Administration)<br>
                     </strong>
                 </td>
             </tr>
