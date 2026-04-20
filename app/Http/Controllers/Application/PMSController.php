@@ -1549,7 +1549,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                 //      &nbsp;&nbsp; 1. House Rent Allowance (HRA) - <strong><em>Nu. $HraAllowance ($HraAllowanceWords)</em></strong> <br/><br/>";
                 // }
 
-                $content .= "Wishing you continued sucess in your role. <br/><br/> Warm Regards <br/>";
+                $content .= "Wishing you continued success in your role. <br/><br/> Warm Regards <br/>";
 
 
 
