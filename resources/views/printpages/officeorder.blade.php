@@ -141,6 +141,7 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
         <table style="border:none;">
             <br />
             <br />
+            <br />
             <tr>
                 <td style='width:50%;border:none;'>
                     For <strong>Bhutan Carbide and Chemical Limited</strong>
