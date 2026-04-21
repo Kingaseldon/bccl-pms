@@ -1538,7 +1538,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                 $content = "<strong>Subject: Promotion Order</strong> <br/><br/>";
                 $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>";
                 $content .= "We are pleased to inform you that, in recognition of your commendable performance, consistent hard work, and significant responsibilities you have shouldered, the management has approved your promotion to " . ($newEmployeeDesignation ? " as <strong><em>$newEmployeeDesignation ($employeeDept) &nbsp;$newGradeStep (Position Level)</em></strong>." : "to <strong><em>$newGradeStep (Position Level)</em></strong>.") . "
-                 with revised Basic Pay Salary of <strong><em>Nu. $newBasicPay </em></strong> per month with the pay scale of <strong><em>($newPayScale)</em></strong>, with effect from <strong><em>$effectiveDate</em></strong> <br/><br/> ";
+                 with revised Basic salary of <strong><em>Nu. $newBasicPay </em></strong> per month with the pay scale of <strong><em>($newPayScale)</em></strong>, with effect from <strong><em>$effectiveDate</em></strong> <br/><br/> ";
 
                 $content .= "Your commitment, efficiency, and professional input have significantly contributed to the overall success of <strong>$employeeDept</strong>. We sincerely appreciate your effort and positive impact of your work. We trust that you will maintain, and indeed surpass, this level of performance in the future. <br/><br/>
                 All other service terms shall be as per the appointment order and service rule of the company in force. </br></br>
