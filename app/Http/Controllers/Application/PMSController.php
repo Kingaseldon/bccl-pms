@@ -1599,7 +1599,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
             case 11: //appreciation letter
                 $content = "<strong>Subject: Letter of Appreciation</strong> <br/><br/>";
                 $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>";
-                $content .= "I am writing this letter to express my sincere appreciation for your <strong><em>Outstanding/Star (Exceptional)</em></strong> performance during the recent PMS cycle. This remarkable performance is a testament to your consistent hard work, unwavering commitment and resilient discharge of your duty.</br></br>";
+                $content .= "I am writing this letter to express my sincere appreciation for your exceptional performance during the recent PMS cycle. This remarkable performance is a testament to your consistent hard work, unwavering commitment and resilient discharge of your duty.</br></br>";
                 $content .= "This remarkable performance not only demonstrates your professional proficiency and personal commitment towards your work but also sets an exemplary standard to other employees in the company. As a token of our gratitude and recognition kindly accept this letter of appreciation and I look forward to your continued and even better performance in future.";
 
 
