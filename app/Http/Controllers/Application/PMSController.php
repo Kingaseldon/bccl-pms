@@ -24,6 +24,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use App\Models\PMSEmployeeGoal;
 use App\Models\PMSEmployeeGoalDetail;
+use Carbon\Carbon;
 use PDF; //FOR PDF:: usage
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -1557,11 +1558,22 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                        2. Personal file";
                 break;
 
-            case 13:
-                $cc = "1. TMPL Management Committee members, for information<br/>
-                       2. $hodLabel, $employeeDept for necessary action<br/>
-                       3. Executive Manager, Human Resource and Administration Department for record and necessary action<br/>
-                       4. $employeeName, for information<br/>";
+            case 13: //compulasory retirement
+
+                $content = "<strong>Subject: Compulsory Retirement </strong> <br/><br/>";
+
+                $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>";
+                $content .= "We regret to inform that your performance rating has not met the required standard despite of Performance Improvement Notice that we have served after the previous cycle of PMS. Therefore, your services with the company shall be discontinued from the date of issuance of this order.</br></br>";
+
+
+                $content .= "We thank you for the services you have rendered to the company so far. You will be entitled to all post-retirement benefits as per the Service Rule of the company.</br>";
+                $content .= "We wish you all the best in your future endeavors.</br></br>";
+
+
+
+                $cc = "1. HRAD & F/A – for necessary action<br/>
+                       2. Office Reference File & Personal File<br/>
+                       ";
                 break;
             case 12: //letter of asking improvement
                 $content = "<strong>Subject: PIP Notice</strong> <br/><br/>";
