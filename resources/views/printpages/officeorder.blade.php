@@ -147,8 +147,8 @@ $path_imgFooter = 'data:image/' . $extencion . ';base64,' . $img_base_64Footer;
                 </td>
             </tr>
 
-            <br />
-            <br />
+
+
             <br />
             <br />
             <tr>

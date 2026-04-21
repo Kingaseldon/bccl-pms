@@ -1505,7 +1505,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
                 $content = "<strong>Subject: Increment Order</strong> <br/><br/>";
                 $content .= "Dear  <strong><em>$employeeName</em></strong>, <br/><br/>
-                In appreciation of your hard work and commitments you displayed towards the company, the management is pleased to grant you <strong><em>$paySlab</em></strong> special increment(s) in the same position level. Your new Basic salary would be <strong><em>Nu. $newBasicPay</em></strong> per month with effect from <strong><em>$effectiveDate</em></strong>.<br/><br/>";
+                In appreciation of your hard work and commitments you displayed towards the company, the management is pleased to grant you <strong><em>$paySlab</em></strong> special increment(s) in the same position level. <br/><br/> Your new Basic salary would be <strong><em>Nu. $newBasicPay</em></strong> per month with effect from <strong><em>$effectiveDate</em></strong>.<br/><br/>";
 
                 $content .= "All other terms and conditions of your service shall be as per the appointment order and the service rule of the company. The management hopes that you will continue to work hard and demonstrate better performance in future. <br/>";
 
@@ -1549,7 +1549,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
                 //      &nbsp;&nbsp; 1. House Rent Allowance (HRA) - <strong><em>Nu. $HraAllowance ($HraAllowanceWords)</em></strong> <br/><br/>";
                 // }
 
-                $content .= "Wishing you continued success in your role. <br/><br/> Warm Regards <br/>";
+                $content .= "Wishing you continued success in your role. <br/> Warm Regards <br/>";
 
 
 
