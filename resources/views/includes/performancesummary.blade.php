@@ -153,16 +153,14 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                             @if ($isAdmin == false)
                                 {{ $assessmentArea->Level1Rating }}
                             @else
-                                @if ($assessmentArea->Level2Rating == null)
-                                    @if ($assessmentArea->Level1Rating >= 0)
-                                        <input type="number" class="editable-score"
-                                            name="Level1Rating[{{ $assessmentArea->Id }}]"
-                                            value="{{ $assessmentArea->Level1Rating }}"
-                                            data-id="{{ $assessmentArea->Id }}" data-type="Level1Rating" min="0"
-                                            max="{{ $assessmentArea->Weightage }}"
-                                            @if ($isAdmin == false) readonly disabled @endif step="any"
-                                            style="width:35%;" />
-                                    @endif
+                                @if ($assessmentArea->Level1Rating > 0)
+                                    <input type="number" class="editable-score"
+                                        name="Level1Rating[{{ $assessmentArea->Id }}]"
+                                        value="{{ $assessmentArea->Level1Rating }}"
+                                        data-id="{{ $assessmentArea->Id }}" data-type="Level1Rating" min="0"
+                                        max="{{ $assessmentArea->Weightage }}"
+                                        @if ($isAdmin == false) readonly disabled @endif step="any"
+                                        style="width:50%;" />
                                 @endif
                             @endif
                         </td>
@@ -191,20 +189,18 @@ $finalAdjustmentPercentDetails = $controllerObject->fetchCurrentPMSAdjustmentDet
                                 @if ($isAdmin == false)
                                     {{ $assessmentArea->Level2Rating }}
                                 @else
-                                    @if ($assessmentArea->ApplicableToLevel2 == 1)
-                                        @if ($assessmentArea->Level2Rating >= 0)
-                                            <input type="number" class="editable-score"
-                                                name="Level2Rating[{{ $assessmentArea->Id }}]"
-                                                value="{{ $assessmentArea->Level2Rating }}"
-                                                data-id="{{ $assessmentArea->Id }}" data-type="Level2Rating"
-                                                min="0" max="{{ $assessmentArea->Weightage }}" step="any"
-                                                style="width: 35%;" />
-                                        @endif
-                                        @endif @if ($assessmentArea->ApplicableToLevel2 == 0)
-                                            <?php $level2QuantitativeTotal += $assessmentArea->Level2Rating; ?>
-                                        @else
-                                            <?php $level2QualitativeTotal += $assessmentArea->Level2Rating; ?>
-                                        @endif
+                                    @if ($assessmentArea->Level2Rating > 0)
+                                        <input type="number" class="editable-score"
+                                            name="Level2Rating[{{ $assessmentArea->Id }}]"
+                                            value="{{ $assessmentArea->Level2Rating }}"
+                                            data-id="{{ $assessmentArea->Id }}" data-type="Level2Rating" min="0"
+                                            max="{{ $assessmentArea->Weightage }}" step="any"
+                                            style="width: 50%;" />
+                                    @endif
+                                    @endif @if ($assessmentArea->ApplicableToLevel2 == 0)
+                                        <?php $level2QuantitativeTotal += $assessmentArea->Level2Rating; ?>
+                                    @else
+                                        <?php $level2QualitativeTotal += $assessmentArea->Level2Rating; ?>
                                     @endif
                             </td>
                         @endif

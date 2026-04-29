@@ -1358,7 +1358,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
 
         $id = $details[0]->Id;
         $pmsOutcomeId = $details[0]->PMSOutcomeId;
-        if (in_array((int) $pmsOutcomeId, [13, 12, 10, 8])) {
+        if (in_array((int) $pmsOutcomeId, [])) {
             $hasWysiwyg = true;
         } else {
             $hasEffectiveDate = true;
