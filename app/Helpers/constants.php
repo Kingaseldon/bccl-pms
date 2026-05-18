@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: SWM
@@ -35,3 +36,11 @@ const CONST_SUPERVISORID_DEPARTMENTHEAD = 1;
 
 const CONST_GRADE_E0 = 1;
 const CONST_SYSSETTING_PAYSCALETYPE = 1;
+
+const CONST_PMSSETTING_FIRSTPMSSTARTDATE = "Y-01-01";   // Start date for the first PMS of the year
+const CONST_PMSSETTING_FIRSTPMSENDDATE = "Y-02-28";  // End date for the first PMS of the year
+const CONST_PMSSETTING_SECONDPMSSTARTDATE = "Y-07-01";   // Start date for the second PMS of the year
+const CONST_PMSSETTING_SECONDPMSENDDATE = "Y-09-30"; // End date for the second PMS of the year
+
+const CONST_PMSSETTING_SENDMAIL = false; // Flag to enable or disable sending emails for PMS submissions
+const CONST_PMSSETTING_SENDSMS = false; // Flag to enable or disable sending SMS for PMS submissions

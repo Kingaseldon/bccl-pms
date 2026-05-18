@@ -327,7 +327,10 @@ class PMSController extends Controller
             $endingOfCurrentPMS = date_sub(date_create($currentPMSStartDate), date_interval_create_from_date_string("1 Days"));
             $endingDateOfCurrentPMS = $endingOfCurrentPMS->format('Y-m-d');
             $message = "PMS for " . convertDateToClientFormat($previousPMSDate) . " to " . convertDateToClientFormat($endingDateOfCurrentPMS) . " has been closed by HR Admin.";
-            return view('application.pmsappraise')->with('status', $status)->with('closedMessage', $message);
+            return view('application.pmsappraise')
+                ->with('status', $status)
+                ->with('closedMessage', $message)
+                ->with('endingDateOfCurrentPMS', $endingDateOfCurrentPMS);
         }
 
         $today = strtotime(date('Y-m-d'));
@@ -1286,6 +1289,7 @@ Z1.AppraisedByEmployeeId = ?) on T2.EmployeeId = T1.Id and (DATE_FORMAT(T2.Submi
     {
         $empId = Auth::user()->EmpId;
         $history = $this->getEmployeePMSHistory(trim($empId));
+        // dd($history);
         return view('application.pmshistory')->with('history', $history);
     }
 
